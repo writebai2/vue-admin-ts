@@ -16,7 +16,7 @@ export default defineConfig(({ command }) => {
       vue(),
       viteMockServe({
         // mock 文件路径
-        mockPath: "mock",
+        mockPath: "src/mock",
         // 只有开发环境才开启mock
         enable: command === "serve",
       }),

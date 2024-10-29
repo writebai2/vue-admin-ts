@@ -24,7 +24,7 @@ function createUserList() {
 export default (): MockMethod[] => [
   // 用户登录接口
   {
-    url: "/api/user/login",
+    url: "/api/users/login",
     method: "post",
     response: ({ body }: { body: LoginBody }) => {
       const { username, password } = body

@@ -1,32 +1,40 @@
-import { defineConfig } from "vite"
+import { defineConfig, loadEnv } from "vite"
 import vue from "@vitejs/plugin-vue"
-import path, { resolve } from "path"
-// ElementUi 引入
+// UnoCSS
+import UnoCSS from "unocss/vite"
+// element-plus
 import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
-// mock 模拟数据
+// Mock
 import { viteMockServe } from "vite-plugin-mock"
+// 别名
+import { resolve } from "path"
 
-const pathSrc = path.resolve(__dirname, "./types")
+const pathType = resolve(__dirname, "./types")
 
-export default defineConfig(({ command }) => {
+export default defineConfig(({ command, mode }) => {
+  const env = loadEnv(mode, process.cwd())
   return {
+    base: "./",
     plugins: [
       vue(),
+      UnoCSS(),
+      // mock
       viteMockServe({
         // mock 文件路径
-        mockPath: "src/mock",
+        mockPath: "./src/mock",
         // 只有开发环境才开启mock
         enable: command === "serve",
       }),
+      // element
       AutoImport({
         resolvers: [ElementPlusResolver()],
-        dts: resolve(pathSrc, "auto-imports.d.ts"),
+        dts: resolve(pathType, "auto-imports.d.ts"),
       }),
       Components({
-        resolvers: [ElementPlusResolver()],
-        dts: resolve(pathSrc, "components.d.ts"),
+        resolvers: [ElementPlusResolver({ importStyle: "sass" })],
+        dts: resolve(pathType, "components.d.ts"),
       }),
     ],
     resolve: {
@@ -36,6 +44,13 @@ export default defineConfig(({ command }) => {
     },
     server: {
       port: 3000,
+      proxy: {
+        [env.VITE_BASE_URL]: {
+          target: env.VITE_URL,
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/api/, ""),
+        },
+      },
     },
   }
 })

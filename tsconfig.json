@@ -1,7 +1,18 @@
 {
   "files": [],
+  "compilerOptions": {
+    "types": [
+      "node",
+      "element-plus/global",
+      "vite/client"
+    ]
+  },
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

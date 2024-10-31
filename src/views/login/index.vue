@@ -60,8 +60,8 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { type LoginRequestData } from "@/api/login/types/login"
-import { loginApi } from "@/api/login/index"
+import { type loginRequestData } from "@/api/type/user.d.ts"
+import { loginApi } from "@/api/mock/index"
 import { type FormInstance, type FormRules } from "element-plus"
 import router from "@/router"
 

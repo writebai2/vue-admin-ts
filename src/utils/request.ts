@@ -1,18 +1,27 @@
-import axios, { type InternalAxiosRequestConfig, AxiosResponse } from "axios"
-import qs from "qs"
+import { message } from "@/Hooks/Element-plus"
+// import { useUserStore } from "@/stores/modules/user"
+
+import axios, {
+  type Method,
+  AxiosRequestConfig,
+  InternalAxiosRequestConfig,
+  AxiosResponse,
+} from "axios"
+// 错误代码
+import { error_code } from "./error-code"
+import { GETTOKEN } from "./local"
 
 const service = axios.create({
-  baseURL: "/api",
-  timeout: 50000,
-  headers: { "Content-Type": "application/json;charset=utf-8" },
-  paramsSerializer: (params) => {
-    return qs.stringify(params)
-  },
+  baseURL: import.meta.env.VITE_BASE_URL,
+  timeout: 5000,
 })
-
 // 请求拦截器
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    //   const userStore = useUserStore()
+    if (GETTOKEN()) {
+      config.headers.Token = GETTOKEN()
+    }
     return config
   },
   (error: any) => {
@@ -20,6 +29,7 @@ service.interceptors.request.use(
   }
 )
 
+// 必须先拦截一下
 // 响应拦截器
 service.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -33,7 +43,7 @@ service.interceptors.response.use(
     const code = apiData.code
     // 如果没有 code，则返回异常
     if (code === undefined) {
-      ElMessage.error("非本系统接口")
+      message("error", "非本系统接口")
       return Promise.reject(new Error("非本系统接口"))
     }
     switch (code) {
@@ -44,57 +54,32 @@ service.interceptors.response.use(
       //   return logout()
       default:
         // 不是正确的 code
-        ElMessage.error(apiData.message || "Error")
+        message("error", apiData.message || "Error")
         return Promise.reject(new Error("Error"))
     }
   },
-  (error: any) => {
-    // status 是 HTTP 状态码
-    if (error.response) {
-      const code = error.response.status
-      switch (code) {
-        case 400:
-          error.message = "请求错误"
-          break
-        case 401:
-          // Token 过期时
-          // logout()
-          break
-        case 403:
-          error.message = "拒绝访问"
-          break
-        case 404:
-          error.message = "请求地址出错"
-          break
-        case 408:
-          error.message = "请求超时"
-          break
-        case 500:
-          error.message = "服务器内部错误"
-          break
-        case 501:
-          error.message = "服务未实现"
-          break
-        case 502:
-          error.message = "网关错误"
-          break
-        case 503:
-          error.message = "服务不可用"
-          break
-        case 504:
-          error.message = "网关超时"
-          break
-        case 505:
-          error.message = "HTTP 版本不受支持"
-          break
-        default:
-          break
-      }
-      ElMessage.error(error.message)
-      return Promise.reject(error)
-    }
+  (error) => {
+    message("error", error_code(error.response.status) || "网络问题")
+    return Promise.reject(new Error(error))
   }
 )
 
-// 导出 axios 实例
-export default service
+type Data<T> = {
+  code: string
+  message: string
+  data: T
+}
+const request = <T>(
+  url: string,
+  method: Method = "get",
+  data?: object | string,
+  config?: AxiosRequestConfig
+) => {
+  return service.request<T, Data<T>>({
+    url,
+    method,
+    [method.toLowerCase() === "get" ? "params" : "data"]: data,
+    ...config,
+  })
+}
+export default request

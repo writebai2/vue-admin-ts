@@ -7,7 +7,7 @@ const userinfo = [
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     username: "admin",
-    password: 123456,
+    password: 12345678,
     desc: "系统管理员",
     roles: ["系统管理员"],
     buttons: ["cuser.detail", "cuser.user"],
@@ -36,7 +36,7 @@ const userinfo = [
     avatar:
       "https://wpimg.wallstcn.com/f778738c-e4f8-4870-b634-56703b4acafe.gif",
     username: "user",
-    password: 123456,
+    password: 12345678,
     desc: "用户",
     roles: ["用户"],
     buttons: ["cuser.detail", "cuser.user"],

@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { type loginRequestData } from "@/api/type/user.d.ts"
+import { type loginRequestData } from "@/api/type/user"
 import { loginApi } from "@/api/mock/index"
 import { type FormInstance, type FormRules } from "element-plus"
 import router from "@/router"
@@ -84,7 +84,7 @@ const loginFormRules: FormRules = {
 }
 
 // 登录表单
-const loginFormData: LoginRequestData = reactive({
+const loginFormData: loginRequestData = reactive({
   username: "",
   password: "",
   code: "",
@@ -114,7 +114,7 @@ const handleLogin = () => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 :deep(.el-card__header) {
   padding: 0;
 }

@@ -42,6 +42,18 @@ export default defineConfig(({ command, mode }) => {
         "@": resolve(__dirname, "./src"),
       },
     },
+    // 主题定制（主题覆盖）
+    css: {
+      preprocessorOptions: {
+        scss: {
+          javascriptEnabled: true,
+          api: "modern-compiler", // 修改api调用方式
+          // 自动导入定制化样式文件进行样式覆盖
+          additionalData: `@use "@/config/public.scss" as *;`,
+        },
+      },
+    },
+    // 配置代理跨域
     server: {
       port: 3000,
       proxy: {

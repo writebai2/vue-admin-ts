@@ -102,7 +102,7 @@ const handleLogin = () => {
           router.push({ path: "/" })
         })
         .catch(() => {
-          loginFormData.password = ""
+          // loginFormData.password = ""
         })
         .finally(() => {
           loading.value = false

@@ -65,7 +65,7 @@ service.interceptors.response.use(
 )
 
 type Data<T> = {
-  code: string
+  code: number
   message: string
   data: T
 }

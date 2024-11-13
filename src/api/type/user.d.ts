@@ -2,8 +2,7 @@ export interface loginResult {
   token: string
 }
 
-export interface loginRequestData {
+export interface loginParams {
   username: string
   password: string
-  code: string
 }

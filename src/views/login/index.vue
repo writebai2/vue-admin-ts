@@ -60,10 +60,12 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { type loginRequestData } from "@/api/type/user"
-import { loginApi } from "@/api/mock/index"
+import { useUserStore } from "@/store/modules/user"
 import { type FormInstance, type FormRules } from "element-plus"
-import router from "@/router"
+import { useRouter } from "vue-router"
+
+const router = useRouter()
+const userStore = useUserStore()
 
 const imgUrl = new URL("@/assets/login/login-head.png", import.meta.url).href
 const formType = ref(false)
@@ -84,7 +86,7 @@ const loginFormRules: FormRules = {
 }
 
 // 登录表单
-const loginFormData: loginRequestData = reactive({
+const loginFormData = reactive({
   username: "",
   password: "",
   code: "",
@@ -94,19 +96,14 @@ const loading = ref(false)
 
 // 登录
 const handleLogin = () => {
-  loginFormRef.value?.validate((valid: boolean, fields) => {
+  loginFormRef.value?.validate(async (valid: boolean, fields) => {
     if (valid) {
       loading.value = true
-      loginApi(loginFormData)
-        .then(({ data }) => {
-          router.push({ path: "/" })
-        })
-        .catch(() => {
-          // loginFormData.password = ""
-        })
-        .finally(() => {
-          loading.value = false
-        })
+      try {
+        await userStore.loginUp(loginFormData)
+        router.push({ path: "/" })
+      } catch (err: any) {}
+      loading.value = false
     } else {
       console.error("表单验证不通过", fields)
     }

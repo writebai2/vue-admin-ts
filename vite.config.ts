@@ -7,7 +7,7 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 // Mock
-import { viteMockServe } from "vite-plugin-mock"
+import mockDevServerPlugin from "vite-plugin-mock-dev-server"
 // 别名
 import { resolve } from "path"
 
@@ -21,12 +21,13 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       UnoCSS(),
       // mock
-      viteMockServe({
-        // mock 文件路径
-        mockPath: "./src/mock",
-        // 只有开发环境才开启mock
-        enable: command === "serve",
-      }),
+      // viteMockServe({
+      //   // mock 文件路径
+      //   mockPath: "./src/mock",
+      //   // 只有开发环境才开启mock
+      //   enable: command === "serve",
+      // }),
+      env.VITE_MOCK_DEV_SERVER === "true" ? mockDevServerPlugin() : null,
       // element
       AutoImport({
         resolvers: [ElementPlusResolver()],
@@ -49,7 +50,10 @@ export default defineConfig(({ command, mode }) => {
           javascriptEnabled: true,
           api: "modern-compiler", // 修改api调用方式
           // 自动导入定制化样式文件进行样式覆盖
-          additionalData: `@use "@/config/public.scss" as *;`,
+          additionalData: `  
+          @use "@/styles/element/index.scss" as *;
+          @use "@/config/public.scss" as *;
+          `,
         },
       },
     },

@@ -15,6 +15,7 @@ export const constRouter: Array<RouteRecordRaw> = [
     path: "/",
     name: "/home",
     meta: { title: "", icon: "", isShow: false },
+    redirect: "/home",
     component: Layout,
     children: [
       {

@@ -7,7 +7,7 @@ import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 // Mock
-import mockDevServerPlugin from "vite-plugin-mock-dev-server"
+import { viteMockServe } from "vite-plugin-mock"
 // 别名
 import { resolve } from "path"
 
@@ -21,13 +21,12 @@ export default defineConfig(({ command, mode }) => {
       vue(),
       UnoCSS(),
       // mock
-      // viteMockServe({
-      //   // mock 文件路径
-      //   mockPath: "./src/mock",
-      //   // 只有开发环境才开启mock
-      //   enable: command === "serve",
-      // }),
-      env.VITE_MOCK_DEV_SERVER === "true" ? mockDevServerPlugin() : null,
+      viteMockServe({
+        // mock 文件路径
+        mockPath: "./src/mock",
+        // 只有开发环境才开启mock
+        enable: command === "serve",
+      }),
       // element
       AutoImport({
         resolvers: [ElementPlusResolver()],

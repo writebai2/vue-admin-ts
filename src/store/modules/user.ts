@@ -7,7 +7,7 @@ import type { RouteLocationOptions } from "vue-router"
 import cloneDeep from "lodash/cloneDeep"
 import type { loginParams } from "@/api/type/user"
 import { anyRouter, asyncRouter, constRouter } from "@/router/route"
-import store from "@/store/index"
+import { store } from "@/store/index"
 
 export const useUserStore = defineStore(
   "user",
@@ -102,12 +102,12 @@ export const useUserStore = defineStore(
       resetRoutes,
       loadRoutes,
     }
-  },
-  {
-    persist: {
-      key: "user",
-    },
   }
+  // {
+  //   persist: {
+  //     key: "user",
+  //   },
+  // }
 )
 
 /** 在 setup 外使用 */

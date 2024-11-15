@@ -8,5 +8,5 @@ export const loginApi = (loginParams: loginParams) => {
   return request<loginResult>("/login", "POST", loginParams)
 }
 export const getUserInfoApi = (token: string) => {
-  return request<any>("/user", "POST", token)
+  return request<any>("/user", "POST", { token: token })
 }

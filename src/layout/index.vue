@@ -7,11 +7,7 @@
         router
         :default-active="$route.path"
         :collapse="flag"
-        :background-color="
-          dark
-            ? variables['menu-background-dark']
-            : variables['menu-background']
-        "
+        :background-color="variables['menu-background']"
         text-color="#fff"
         :active-text-color="variables['menu-active-text']">
         <MenuItem :menuRouteList="routerMenuList" />
@@ -24,12 +20,16 @@
         'layout-max-main': flag,
       }">
       <!-- 头部 -->
+      <div class="layout-header">
+        <Header />
+      </div>
       <!-- 导航栏 -->
+      <TagViews />
       <!-- 主体部分 -->
       <div
         class="main-content"
         :style="{
-          backgroundColor: dark ? '#1D1E1F' : '#fff',
+          backgroundColor: '#fff',
           transition: 'all 0.2s',
         }">
         <router-view />
@@ -40,18 +40,20 @@
 
 <script setup lang="ts">
 import variables from "@/styles/variables.module.scss"
-import { ref } from "vue"
 import MenuLogo from "./Menu/components/MenuLogo.vue"
 import MenuItem from "./Menu/components/MenuItem.vue"
+import TagViews from "./components/TagViews/index.vue"
+import Header from "./components/Header/index.vue"
 import { useUserStore } from "@/store/modules/user"
+import { useSettingStore } from "@/store/modules/settings"
 import { storeToRefs } from "pinia"
 
 const userStore = useUserStore()
 const { routerMenuList } = storeToRefs(userStore)
 
-const flag = ref(false)
-const dark = ref(false)
-let isflag = ref(true)
+// 设置
+const settings = useSettingStore()
+const { flag } = storeToRefs(settings)
 </script>
 
 <style scoped lang="scss">

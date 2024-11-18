@@ -6,7 +6,6 @@ import { basic } from "@/config/settings"
 import router from "@/router"
 import { useUserStoreHook } from "@/store/modules/user"
 import { GETTOKEN, REMOVETOKEN } from "@/utils/local"
-import { message } from "@/Hooks/Element-plus"
 
 export function setupPermission() {
   // 白名单路由

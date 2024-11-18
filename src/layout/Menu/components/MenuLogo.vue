@@ -1,16 +1,18 @@
 <template>
-  <div
-    class="layout_logo animate__animated animate__fadeIn animate__fast"
-    v-show="true"
-    @click="pushHome">
+  <div class="layout_logo" v-show="true" @click="pushHome">
     <img :src="basic.logo" alt="" />
-    <view class="title" v-show="true">{{ basic.title }}</view>
+    <view class="title" v-show="!flag">{{ basic.title }}</view>
   </div>
 </template>
 
 <script setup lang="ts">
 import { basic } from "@/config/settings"
 import { useRouter } from "vue-router"
+import { useSettingStore } from "@/store/modules/settings"
+import { storeToRefs } from "pinia"
+
+const settings = useSettingStore()
+const { flag } = storeToRefs(settings)
 
 const router = useRouter()
 const pushHome = () => {

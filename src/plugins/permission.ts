@@ -14,7 +14,6 @@ export function setupPermission() {
   // 全局前置守卫
   router.beforeEach(async (to, from, next) => {
     NProgress.start()
-
     document.title = `${basic.title}-${to.meta.title}`
     const hasToken = GETTOKEN()
 

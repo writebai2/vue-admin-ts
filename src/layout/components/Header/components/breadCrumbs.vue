@@ -43,11 +43,11 @@ const routeComputed = computed(() => {
     let homeArr = constRouter.find((route) => {
       return route.path === "/"
     })?.children
+
     breadcrumbRoute = homeArr!.concat(route.matched as any)
   }
   return breadcrumbRoute
 })
-console.log(routeComputed.value)
 </script>
 
 <style scoped lang="scss">

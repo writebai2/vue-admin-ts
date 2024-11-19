@@ -62,9 +62,10 @@
 import { reactive, ref } from "vue"
 import { useUserStore } from "@/store/modules/user"
 import { type FormInstance, type FormRules } from "element-plus"
-import { useRouter } from "vue-router"
+import { useRouter, useRoute } from "vue-router"
 
 const router = useRouter()
+const route = useRoute()
 const userStore = useUserStore()
 
 const imgUrl = new URL("@/assets/login/login-head.png", import.meta.url).href
@@ -101,7 +102,7 @@ const handleLogin = () => {
       loading.value = true
       try {
         await userStore.loginUp(loginFormData)
-        router.push({ path: "/" })
+        router.push({ path: route.query.url as string })
       } catch (err: any) {}
       loading.value = false
     } else {

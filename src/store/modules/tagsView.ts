@@ -60,10 +60,12 @@ export const useTagsViewStore = defineStore(
     }
 
     /***
-     * @清空tag
+     * @清空其他tag
      */
-    const delAllTag = () => {
-      visitedViews.value = []
+    const delOtherTag = (path: string) => {
+      visitedViews.value = visitedViews.value.find((v) => {
+        v.path === path
+      })!
     }
 
     return {

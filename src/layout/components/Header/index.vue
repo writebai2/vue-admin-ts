@@ -4,12 +4,16 @@
       <el-col :span="16">
         <breadCrumbs />
       </el-col>
+      <el-col :span="8">
+        <setting />
+      </el-col>
     </el-row>
   </el-card>
 </template>
 
 <script setup lang="ts">
 import breadCrumbs from "./components/breadCrumbs.vue"
+import setting from "./components/setting.vue"
 </script>
 
 <style scoped lang="scss">

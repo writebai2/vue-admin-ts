@@ -35,21 +35,20 @@ type 参数用于指定弹窗的类型。
 export const messageBox = async (
   title: string,
   content: string,
-  type: string
+  type: string = "primary"
 ) => {
   await new Promise((resolve, reject) => {
     //@ts-expect-error 禁止飘红
     ElMessageBox.confirm(content, title, {
       confirmButtonText: "确定",
       cancelButtonText: "取消",
-
       type,
     })
       .then(() => {
-        resolve("ok")
+        resolve("true")
       })
       .catch(() => {
-        reject("用户点击取消！")
+        return
       })
   })
 }

@@ -74,7 +74,7 @@ export const useTagsViewStore = defineStore(
       changeTag,
       delVisitedView,
       isActive,
-      delAllTag,
+      delOtherTag,
     }
   },
   {

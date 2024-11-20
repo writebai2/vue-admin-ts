@@ -63,9 +63,9 @@ export const useTagsViewStore = defineStore(
      * @清空其他tag
      */
     const delOtherTag = (path: string) => {
-      visitedViews.value = visitedViews.value.find((v) => {
-        v.path === path
-      })!
+      visitedViews.value = visitedViews.value.filter((v) => {
+        return v.path === path || v?.affix === true
+      })
     }
 
     return {

@@ -49,6 +49,7 @@ const tagViewStore = useTagsViewStore()
 const loginOut = async () => {
   await messageBox("提示", "您确定要退出登录吗？")
   userStore.loginOut()
+  tagViewStore.delOtherTag(route.path)
   router.push({
     path: "/login",
     query: {

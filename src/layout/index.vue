@@ -29,7 +29,7 @@
       <div
         class="main-content"
         :style="{
-          backgroundColor: '#fff',
+          backgroundColor: '#f0f2f5',
           transition: 'all 0.2s',
         }">
         <router-view />

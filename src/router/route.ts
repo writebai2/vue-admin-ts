@@ -88,6 +88,21 @@ export const asyncRouter: Array<RouteRecordRaw> = [
       },
     ],
   },
+  {
+    path: "/databoard",
+    name: "databoard",
+    redirect: "/databoard",
+    meta: { title: "", icon: "", isShow: false },
+    component: Layout,
+    children: [
+      {
+        path: "/databoard",
+        name: "data-select",
+        meta: { title: "数据面板", icon: "Histogram", isShow: true },
+        component: () => import("@/views/DataBoard/index.vue"),
+      },
+    ],
+  },
 ]
 
 /***

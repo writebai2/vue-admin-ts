@@ -1,25 +1,18 @@
 <template>
-  <div
-    class="tagView"
-    :style="{
-      backgroundColor: 'white',
-      transition: 'all 0.2s',
-    }">
-    <el-scrollbar>
-      <div class="tags">
-        <template v-for="item in visitedViews" :key="item.title">
-          <el-tag
-            :closable="isAffix(item)"
-            @close="delVisitedView(item.path)"
-            @click="changeTag(item.path)"
-            :class="{ tagItem: true, activeTag: isActive(item.path) }">
-            <div class="tagContent">
-              <div class="dot" v-show="isActive(item.path)"></div>
-              <text>{{ item.title }}</text>
-            </div>
-          </el-tag>
-        </template>
-      </div>
+  <div class="tabs">
+    <el-scrollbar class="scroll-container tags-view-container">
+      <template v-for="item in visitedViews" :key="item.title">
+        <div
+          class="tags-view-item"
+          :class="isActive(item.path) ? 'active' : ''">
+          <router-link :to="{ path: item.path }" v-if="item.title">
+            {{ item.title }}
+          </router-link>
+          <el-icon @click.stop="closeTab(item.path)" v-if="isAffix(item)">
+            <Close />
+          </el-icon>
+        </div>
+      </template>
     </el-scrollbar>
   </div>
 </template>
@@ -34,7 +27,7 @@ const route = useRoute()
 const tagsViewStore = useTagsViewStore()
 
 const { visitedViews } = storeToRefs(tagsViewStore)
-const { delVisitedView, changeTag, isActive } = tagsViewStore
+const { closeTab, isActive } = tagsViewStore
 
 const isAffix = (tag: TagView) => {
   return !tag?.affix
@@ -63,56 +56,76 @@ function addTage() {
 </script>
 
 <style scoped lang="scss">
-.tagView {
-  border-bottom: 1px var(--el-border-color-dark) solid;
-  .tags {
+.tabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 40px;
+  background: #fff;
+  border-bottom: 1px solid #d8dce5;
+  .scroll-container {
+    white-space: nowrap;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    :deep(.el-scrollbar__bar) {
+      bottom: 0px;
+    }
+    :deep(.el-scrollbar__wrap) {
+      height: 49px;
+    }
+  }
+  .tags-view-container {
+    height: 34px;
+    flex: 1;
+    width: 100%;
     display: flex;
   }
-  .tagItem {
-    flex-shrink: 0;
-    display: flex;
-    margin: 5px;
+  .tags-view-item {
+    display: inline-flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 5px 10px 5px 10px;
-    border: 1px var(--el-color-primary) solid;
-    color: var(--el-color-primary);
-    font-size: 10px;
-    border-radius: 3px;
-    .tagContent {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      .dot {
-        width: 6px;
-        height: 6px;
-        background-color: #fff;
-        border-radius: 50%;
-        margin-right: 5px;
-      }
+    position: relative;
+    cursor: pointer;
+    height: 26px;
+    line-height: 26px;
+    border: 1px solid #d8dce5;
+    color: #303133;
+    background: #fff;
+    padding: 0 8px;
+    font-size: 12px;
+    margin-left: 5px;
+    margin-top: 4px;
+    border-radius: 2px;
+    a {
+      height: 26px;
+      display: inline-block;
+      padding-left: 8px;
+      padding-right: 8px;
+      color: #303133;
     }
-
-    &:hover {
-      cursor: pointer;
+    .el-icon-close {
+      display: inline-block;
+      height: 26px;
     }
-    &.activeTag {
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 5px 10px 5px 10px;
-      font-size: 10px;
-      margin: 5px;
-      text-align: center;
-      color: #fff !important;
-      background: #0f5197;
-      :deep(.el-tag__close) {
+    &:first-of-type {
+      margin-left: 15px;
+    }
+    &:last-of-type {
+      margin-right: 15px;
+    }
+    &.active {
+      background: #409eff;
+      border-color: #409eff;
+      color: #fff;
+      a {
         color: #fff;
       }
-      :deep(.el-tag__close):hover {
-        background-color: #fff;
-        color: #0f5197;
+      &:hover {
+        background: #409eff;
       }
+    }
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.06);
     }
   }
 }

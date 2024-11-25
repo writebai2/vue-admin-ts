@@ -30,16 +30,9 @@ export const useTagsViewStore = defineStore(
     }
 
     /***
-     * @切换tag
+     * @关闭tag
      */
-    const changeTag = (path: string) => {
-      router.push({ path: path })
-    }
-
-    /***
-     * @删除tag
-     */
-    const delVisitedView = (path: string) => {
+    const closeTab = (path: string) => {
       // 找到点击数据的索引
       for (const [i, v] of visitedViews.value.entries()) {
         if (v.path === path) {
@@ -71,8 +64,7 @@ export const useTagsViewStore = defineStore(
     return {
       visitedViews,
       addVisitedView,
-      changeTag,
-      delVisitedView,
+      closeTab,
       isActive,
       delOtherTag,
     }

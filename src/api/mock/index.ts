@@ -10,3 +10,7 @@ export const loginApi = (loginParams: loginParams) => {
 export const getUserInfoApi = (token: string) => {
   return request<any>("/user", "POST", { token: token })
 }
+// 获取tableTree
+export const getTableTree = (token: string) => {
+  return request<any>("/table/tree", "POST", { token: token })
+}

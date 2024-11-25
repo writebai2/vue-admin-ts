@@ -1,6 +1,6 @@
-// mock 模拟数据
-import Mock from "mockjs"
-
+/***
+ * @mock模拟数据
+ */
 const userinfo = [
   {
     userId: 2,
@@ -44,6 +44,71 @@ const userinfo = [
     buttons: ["cuser.detail", "cuser.user"],
     routes: ["document", "home", "news", "newsList", "components", "edit"],
     token: "user_Token",
+  },
+]
+
+const treeTable = [
+  {
+    label: "人事部",
+    id: 1,
+    "children|5": [
+      {
+        label: "@cname",
+        "id|+1": 10,
+      },
+    ],
+  },
+  {
+    label: "研发部",
+    id: 2,
+    children: [
+      {
+        label: "前端",
+        id: 3,
+        "children|5": [
+          {
+            label: "@cname",
+            "id|+1": 20,
+          },
+        ],
+      },
+      {
+        label: "后端",
+        id: 4,
+        "children|5": [
+          {
+            label: "@cname",
+            "id|+1": 30,
+          },
+        ],
+      },
+    ],
+  },
+  {
+    label: "运营部",
+    id: 5,
+    children: [
+      {
+        label: "市场运营",
+        id: 6,
+        "children|5": [
+          {
+            label: "@cname",
+            "id|+1": 40,
+          },
+        ],
+      },
+      {
+        label: "互联网营销",
+        id: 7,
+        "children|5": [
+          {
+            label: "@cname",
+            "id|+1": 50,
+          },
+        ],
+      },
+    ],
   },
 ]
 
@@ -93,6 +158,28 @@ export default [
         code: 200,
         message: "获取成功",
         data: userInfo,
+      }
+    },
+  },
+  /***
+   * @数据看板
+   */
+  {
+    url: "/api/table/tree",
+    method: "POST",
+    response: ({ body }: any) => {
+      const token = body["token"]
+
+      const userInfo = userinfo.find((item) => item.token === token)
+      //没有返回失败的信息
+      if (!userInfo) {
+        return { code: 201, data: { message: "token错误" } }
+      }
+
+      return {
+        code: 200,
+        message: "获取成功",
+        data: treeTable,
       }
     },
   },

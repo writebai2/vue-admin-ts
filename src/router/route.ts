@@ -14,8 +14,8 @@ export const constRouter: Array<RouteRecordRaw> = [
   {
     path: "/",
     name: "/home",
-    meta: { title: "", icon: "", isShow: false },
     redirect: "/home",
+    meta: { title: "", icon: "", isShow: false },
     component: Layout,
     children: [
       {
@@ -42,16 +42,19 @@ export const asyncRouter: Array<RouteRecordRaw> = [
     name: "moremenu",
     meta: { title: "多级菜单", icon: "Operation", isShow: true },
     component: Layout,
+    redirect: "/moremenu/menu-one",
     children: [
       {
         path: "/moremenu/menu-one",
         name: "menu-one",
         meta: { title: "一级菜单 ", icon: "DArrowRight", isShow: true },
         component: () => import("@/views/MoreMenu/MenuOne/index.vue"),
+        redirect: "/moremenu/menu-one/menu-two",
         children: [
           {
             path: "/moremenu/menu-one/menu-two",
             name: "menu-two",
+            redirect: "/moremenu/menu-one/menu-two/menu-three-1",
             meta: { title: "二级菜单 ", icon: "DArrowRight", isShow: true },
             component: () =>
               import("@/views/MoreMenu/MenuOne/MenuTwo/index.vue"),

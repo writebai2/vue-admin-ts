@@ -3,16 +3,16 @@
     <div class="left">
       <Category />
     </div>
-    <div class="right">右侧</div>
+    <el-divider direction="vertical" />
+    <div class="right">
+      <TableData />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import Category from "./components/tree.vue"
-import { getTableTree } from "@/api/mock/index"
-import { useUserStore } from "@/store/modules/user"
-
-const useSotre = useUserStore()
+import Category from "./components/Left/tree.vue"
+import TableData from "./components/Right/index.vue"
 </script>
 
 <style scoped lang="scss">
@@ -27,7 +27,13 @@ const useSotre = useUserStore()
   .right {
     flex: 1;
     width: calc(100% - 250px);
-    background-color: blue;
+    height: 100%;
+  }
+
+  .el-divider--vertical {
+    height: 100%;
+    margin: 0;
+    padding: 0;
   }
 }
 </style>

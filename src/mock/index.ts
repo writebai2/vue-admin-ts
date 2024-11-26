@@ -49,7 +49,7 @@ const userinfo = [
 
 const treeTable = [
   {
-    label: "人事部",
+    label: "vipon",
     id: 1,
     "children|5": [
       {
@@ -59,7 +59,7 @@ const treeTable = [
     ],
   },
   {
-    label: "研发部",
+    label: "抓客",
     id: 2,
     children: [
       {
@@ -85,7 +85,7 @@ const treeTable = [
     ],
   },
   {
-    label: "运营部",
+    label: "运营",
     id: 5,
     children: [
       {

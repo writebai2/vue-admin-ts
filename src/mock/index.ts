@@ -112,6 +112,114 @@ const treeTable = [
   },
 ]
 
+const tableData = [
+  {
+    id: 1,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 2,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 3,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 4,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 5,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 6,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 7,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 8,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 9,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 10,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 11,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+  {
+    id: 12,
+    date: "2018-07-24",
+    sales: 23.34,
+    sale: 137597.76,
+    const: 102203.71,
+    profit: 35394.05,
+  },
+]
+
+const tableHeader = [
+  { label: "", width: "", prop: "id" },
+  { label: "日期", width: "", prop: "date" },
+  { label: "销售量", width: "", prop: "sales" },
+  { label: "销售额", width: "", prop: "sale" },
+  { label: "成本", width: "", prop: "const" },
+  { label: "利润", width: "", prop: "profit" },
+]
+
 export default [
   /***
    * @用户登录接口
@@ -180,6 +288,31 @@ export default [
         code: 200,
         message: "获取成功",
         data: treeTable,
+      }
+    },
+  },
+  /***
+   * @数据
+   */
+  {
+    url: "/api/table/data",
+    method: "POST",
+    response: ({ body }: any) => {
+      const token = body["token"]
+
+      const userInfo = userinfo.find((item) => item.token === token)
+      //没有返回失败的信息
+      if (!userInfo) {
+        return { code: 201, data: { message: "token错误" } }
+      }
+
+      return {
+        code: 200,
+        message: "获取成功",
+        data: {
+          header: tableHeader,
+          data: tableData,
+        },
       }
     },
   },

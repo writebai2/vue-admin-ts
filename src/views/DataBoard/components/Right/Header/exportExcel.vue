@@ -4,9 +4,9 @@
 
     <el-button
       size="small"
+      @click="handleExportExcel"
       type="primary"
-      icon="Download"
-      class="export-excel-btn">
+      icon="Download">
       导出Excel
     </el-button>
   </div>
@@ -36,13 +36,25 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
+import { ref, unref } from "vue"
+import { aoaToSheetXlsx } from "./ExportExcel"
+import { tableHeader } from "@/api/type/table"
 import { dayjs } from "element-plus"
 
 // const startUrl = new URL("@/assets/select/start.svg",import.meta.url).href
-const defaultName = dayjs().locale("zh-cn").format("YYYY-MM-DD")
-const fileName = ref("")
 
+const props = defineProps({
+  data: {
+    type: Array,
+    default: [],
+  },
+  header: {
+    type: Array<tableHeader>,
+    default: [],
+  },
+})
+
+const fileName = ref("")
 const runStatus = ref(false)
 
 const runStart = () => {
@@ -64,6 +76,26 @@ const options = [
     label: "vipon_log",
   },
 ]
+
+// 导出 Excel 表格
+const handleExportExcel = () => {
+  try {
+    if (!unref(fileName).trim()) {
+      const newFileName =
+        "new_excel_" + dayjs().locale("zh-cn").format("YYYY-MM-DD")
+
+      aoaToSheetXlsx(props.header, props.data, `${newFileName}.xlsx`)
+      return
+    }
+    aoaToSheetXlsx(props.header, props.data, `${unref(fileName)}.xlsx`)
+  } catch (error) {
+    ElMessage.error({
+      message: "文件导出异常",
+      duration: 1000,
+      showClose: false,
+    })
+  }
+}
 </script>
 
 <style lang="scss" scoped>

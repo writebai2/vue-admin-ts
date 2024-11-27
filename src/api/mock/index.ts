@@ -1,5 +1,6 @@
 import request from "@/utils/request"
 import type { loginResult, loginParams } from "../type/user"
+import { tableDataResult } from "../type/table"
 
 /***
  * @mockjs模拟数据
@@ -13,4 +14,8 @@ export const getUserInfoApi = (token: string) => {
 // 获取tableTree
 export const getTableTree = (token: string) => {
   return request<any>("/table/tree", "POST", { token: token })
+}
+// 获取tableData
+export const getTableData = (token: string) => {
+  return request<tableDataResult>("/table/data", "POST", { token: token })
 }

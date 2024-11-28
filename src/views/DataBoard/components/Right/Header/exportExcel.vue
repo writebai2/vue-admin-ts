@@ -29,17 +29,20 @@
     </el-select>
 
     <!-- 权限管理 -->
-    <el-button class="permission-btn" size="small" @click="runStart">
+    <el-button class="permission-btn" size="small" @click="addRole">
       <i class="permission-svg" />
     </el-button>
+    <Layer :layer="layer"></Layer>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, unref } from "vue"
+import { reactive, ref, unref } from "vue"
 import { aoaToSheetXlsx } from "./ExportExcel"
 import { tableHeader } from "@/api/type/table"
 import { dayjs } from "element-plus"
+import Layer from "../role/layer.vue"
+import { LayerInterface } from "@/components/layer/type"
 
 // const startUrl = new URL("@/assets/select/start.svg",import.meta.url).href
 
@@ -54,6 +57,12 @@ const props = defineProps({
   },
 })
 
+const layer: LayerInterface = reactive({
+  show: false,
+  title: "权限管理",
+  showButton: true,
+})
+
 const fileName = ref("")
 const runStatus = ref(false)
 
@@ -63,6 +72,10 @@ const runStart = () => {
 
 const runStop = () => {
   runStatus.value = !runStatus.value
+}
+
+const addRole = () => {
+  layer.show = true
 }
 
 const value = ref("")

@@ -49,64 +49,62 @@ const userinfo = [
 
 const treeTable = [
   {
-    label: "vipon",
     id: 1,
-    "children|5": [
+    label: "vipon",
+    children: [
       {
-        label: "@cname",
-        "id|+1": 10,
+        id: 9,
+        label: "产品评论",
+      },
+      {
+        id: 10,
+        label: "每日投诉明细",
+      },
+      {
+        id: 20,
+        label: "日均发码量",
+      },
+      {
+        id: 30,
+        label: "卖家订阅套餐",
+      },
+      {
+        id: 11,
+        label: "活动",
+        children: [
+          {
+            id: 15,
+            label: "用户统计",
+          },
+        ],
       },
     ],
   },
   {
-    label: "抓客",
     id: 2,
+    label: "抓客",
     children: [
       {
-        label: "前端",
-        id: 3,
-        "children|5": [
-          {
-            label: "@cname",
-            "id|+1": 20,
-          },
-        ],
+        id: 5,
+        label: "落地页埋点",
       },
       {
-        label: "后端",
-        id: 4,
-        "children|5": [
-          {
-            label: "@cname",
-            "id|+1": 30,
-          },
-        ],
+        id: 6,
+        label: "活跃用户数据",
       },
     ],
   },
   {
+    id: 3,
     label: "运营",
-    id: 5,
     children: [
       {
-        label: "市场运营",
-        id: 6,
-        "children|5": [
-          {
-            label: "@cname",
-            "id|+1": 40,
-          },
-        ],
+        id: 7,
+        label: "注册用户转换跟踪统计",
       },
       {
-        label: "互联网营销",
-        id: 7,
-        "children|5": [
-          {
-            label: "@cname",
-            "id|+1": 50,
-          },
-        ],
+        id: 8,
+        label: "销售数据",
       },
     ],
   },
@@ -219,6 +217,34 @@ const tableHeader = [
   { label: "成本", width: "", prop: "const" },
   { label: "利润", width: "", prop: "profit" },
 ]
+
+const engines = ["vipon_db", "vipon_log", "erp", "大表库"]
+
+const listDetails = {
+  engine: "vipon_db",
+  sqlText: `
+SELECT
+	email,
+	user_id,
+	join_date,
+	source,
+	plan_interval,
+	plan_amount / 100,
+	plan_kind,
+	case 
+when source =1 then next_period_date
+when source =2 then FROM_UNIXTIME(plan_expiry) 
+end as expiry_date
+FROM
+	tbl_user 
+WHERE
+	stripe_id LIKE 'cus_%' 
+	AND stripe_sub LIKE 'sub_%'
+	AND plan_kind = 1
+	AND promotion_limit>0
+	and join_date>'2024-04-30'
+  `,
+}
 
 export default [
   /***

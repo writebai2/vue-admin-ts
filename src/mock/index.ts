@@ -97,117 +97,35 @@ const treeTable = [
   {
     id: 3,
     label: "运营",
-    children: [
+    "children|100": [
       {
-        id: 7,
-        label: "注册用户转换跟踪统计",
-      },
-      {
-        id: 8,
-        label: "销售数据",
+        "id|+1": 20,
+        label: "@cname",
       },
     ],
   },
 ]
 
-const tableData = [
-  {
-    id: 1,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 2,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 3,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 4,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 5,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 6,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 7,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 8,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 9,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 10,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 11,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-  {
-    id: 12,
-    date: "2018-07-24",
-    sales: 23.34,
-    sale: 137597.76,
-    const: 102203.71,
-    profit: 35394.05,
-  },
-]
+const tableData = {
+  // {
+  //   id: 11,
+  //   date: "2018-07-24",
+  //   sales: 23.34,
+  //   sale: 137597.76,
+  //   const: 102203.71,
+  //   profit: 35394.05,
+  // },
+  "data|1000": [
+    {
+      "id|+1": 1,
+      date: '@date("yyyy-MM-dd")',
+      sales: "@float(10, 100, 2, 2)",
+      sale: "@float(10000, 1000000, 2, 2)",
+      const: "@float(10000, 500000, 2, 2)",
+      profit: "@float(1000, 50000, 2, 2)",
+    },
+  ],
+}
 
 const tableHeader = [
   { label: "", width: "", prop: "id" },
@@ -216,6 +134,30 @@ const tableHeader = [
   { label: "销售额", width: "", prop: "sale" },
   { label: "成本", width: "", prop: "const" },
   { label: "利润", width: "", prop: "profit" },
+]
+
+const vxeTableData = [
+  {
+    columns: [
+      { field: "id", title: "" },
+      { field: "date", title: "" },
+      { field: "sales", title: "" },
+      { field: "const", title: "" },
+      { field: "profit", title: "" },
+      { field: "price", title: "" },
+    ],
+    "data|1000": [
+      {
+        "id|+1": 1,
+        date: '@date("yyyy-MM-dd")',
+        sales: "@float(10, 100, 2, 2)",
+        sale: "@float(10000, 1000000, 2, 2)",
+        const: "@float(10000, 500000, 2, 2)",
+        profit: "@float(1000, 50000, 2, 2)",
+        price: "@float(1000, 50000, 2, 2)",
+      },
+    ],
+  },
 ]
 
 const engines = ["vipon_db", "vipon_log", "erp", "大表库"]
@@ -339,6 +281,28 @@ export default [
           header: tableHeader,
           data: tableData,
         },
+      }
+    },
+  },
+  /***
+   * @vxeTable 表格数据
+   */
+  {
+    url: "/api/vxe/table",
+    method: "POST",
+    response: ({ body }: any) => {
+      const token = body["token"]
+
+      const userInfo = userinfo.find((item) => item.token === token)
+      //没有返回失败的信息
+      if (!userInfo) {
+        return { code: 201, data: { message: "token错误" } }
+      }
+
+      return {
+        code: 200,
+        message: "获取成功",
+        data: vxeTableData,
       }
     },
   },

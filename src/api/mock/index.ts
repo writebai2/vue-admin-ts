@@ -1,6 +1,6 @@
 import request from "@/utils/request"
 import type { loginResult, loginParams } from "../type/user"
-import { tableDataResult } from "../type/table"
+import { tableDataResult, vxeTableDataResult } from "../type/table"
 
 /***
  * @mockjs模拟数据
@@ -18,4 +18,8 @@ export const getTableTree = (token: string) => {
 // 获取tableData
 export const getTableData = (token: string) => {
   return request<tableDataResult>("/table/data", "POST", { token: token })
+}
+// 获取vxeTableData
+export const getVxeTableData = (token: string) => {
+  return request<vxeTableDataResult>("/vxe/table", "POST", { token: token })
 }

@@ -10,6 +10,8 @@ import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
 import { viteMockServe } from "vite-plugin-mock"
 // 别名
 import { resolve } from "path"
+// 导入vux-table
+import { lazyImport, VxeResolver } from "vite-plugin-lazy-import"
 
 const pathType = resolve(__dirname, "./types")
 
@@ -35,6 +37,17 @@ export default defineConfig(({ command, mode }) => {
       Components({
         resolvers: [ElementPlusResolver({ importStyle: "sass" })],
         dts: resolve(pathType, "components.d.ts"),
+      }),
+      // vxe-table
+      lazyImport({
+        resolvers: [
+          VxeResolver({
+            libraryName: "vxe-table",
+          }),
+          // VxeResolver({
+          //   libraryName: "vxe-pc-ui",
+          // }),
+        ],
       }),
     ],
     resolve: {

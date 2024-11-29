@@ -56,6 +56,12 @@ importers:
       vue-router:
         specifier: ^4.4.5
         version: 4.4.5(vue@3.5.12(typescript@5.6.3))
+      vxe-table:
+        specifier: ^4.6.25
+        version: 4.6.25(vue@3.5.12(typescript@5.6.3))
+      vxe-table-plugin-element:
+        specifier: ^4.0.3
+        version: 4.0.3(vxe-table@4.6.25(vue@3.5.12(typescript@5.6.3)))
       xlsx-js-style:
         specifier: ^1.2.0
         version: 1.2.0
@@ -99,6 +105,9 @@ importers:
       vite:
         specifier: ^5.4.10
         version: 5.4.10(@types/node@22.8.5)(sass@1.80.5)
+      vite-plugin-lazy-import:
+        specifier: ^1.0.7
+        version: 1.0.7
       vite-plugin-mock:
         specifier: ^3.0.2
         version: 3.0.2(esbuild@0.21.5)(mockjs@1.1.0)(vite@5.4.10(@types/node@22.8.5)(sass@1.80.5))
@@ -1173,6 +1182,9 @@ packages:
   dezalgo@1.0.4:
     resolution: {integrity: sha512-rXSP0bf+5n0Qonsb+SVVfNfIsimO4HEtmnIpPHY8Q1UCzKlQrDMfdobr8nJOOsRgWCyMRqeSBQzmWUMq7zvVig==}
 
+  dom-zindex@1.0.6:
+    resolution: {integrity: sha512-FKWIhiU96bi3xpP9ewRMgANsoVmMUBnMnmpCT6dPMZOunVYJQmJhSRruoI0XSPoHeIif3kyEuiHbFrOJwEJaEA==}
+
   dotenv@16.4.5:
     resolution: {integrity: sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==}
     engines: {node: '>=12'}
@@ -1209,6 +1221,9 @@ packages:
   es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
+
+  es-module-lexer@1.5.4:
+    resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
 
   esbuild@0.21.5:
     resolution: {integrity: sha512-mg3OPMV4hXywwpoDxu3Qda5xCKQi+vCTZq8S9J/EpkhB2HzKXq4SNFZE3+NK93JYxc8VMSep+lOUSC/RVKaBqw==}
@@ -1990,6 +2005,9 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
+  vite-plugin-lazy-import@1.0.7:
+    resolution: {integrity: sha512-mE6oAObOb4wqso4AoUGi9cLjdR+4vay1RCaKJvziBuFPlziZl7J0aw2hsqRTokLVRx3bli0a0VyjMOwsNDv58A==}
+
   vite-plugin-mock-dev-server@1.8.0:
     resolution: {integrity: sha512-YAf0MZbBX/RYyr75kcTfjyCV9ybGoJZNN6FS6nMwKswoB/6uVQOcnjPc3bJBTwEsKord3TaYiuXkHk6e12pv6A==}
     engines: {node: ^18 || >= 20}
@@ -2081,6 +2099,16 @@ packages:
       typescript:
         optional: true
 
+  vxe-table-plugin-element@4.0.3:
+    resolution: {integrity: sha512-iHxPjvw8s83Q6fiOZm2aiGzpRQRcdAGOJw8uZZQMZ5Pw7uJgHev8jTF8QOi/MmlK4c8xbrGxlLyDHi2FPeZkrA==}
+    peerDependencies:
+      vxe-table: ^4.5.0
+
+  vxe-table@4.6.25:
+    resolution: {integrity: sha512-rFhGh8w+420cdnIasQKisiKagz9F/iNieB/z6v0j4GcsMfGHEmSJ72YrHcXogQh4wNlCzKVfb7rl7nREL5eIOg==}
+    peerDependencies:
+      vue: ^3.2.28
+
   w3c-keyname@2.2.8:
     resolution: {integrity: sha512-dpojBhNsCNN7T82Tm7k26A6G9ML3NkhDsnw9n/eoxSRlVBB4CEtIQ/KTCLI2Fwf3ataSXRhYFkQi3SlnFwPvPQ==}
 
@@ -2114,6 +2142,9 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
+
+  xe-utils@3.5.32:
+    resolution: {integrity: sha512-R8ZT2lRnRBQO3pchM1za/Aru+/29DVDWD/OmOFODWWGkiQYz0iVIr8Bq8uKXS6zMhEsSqVCrn46bXzfe/Agjcw==}
 
   xlsx-js-style@1.2.0:
     resolution: {integrity: sha512-DDT4FXFSWfT4DXMSok/m3TvmP1gvO3dn0Eu/c+eXHW5Kzmp7IczNkxg/iEPnImbG9X0Vb8QhROda5eatSR/97Q==}
@@ -3221,6 +3252,8 @@ snapshots:
       asap: 2.0.6
       wrappy: 1.0.2
 
+  dom-zindex@1.0.6: {}
+
   dotenv@16.4.5: {}
 
   duplexer@0.1.2: {}
@@ -3264,6 +3297,8 @@ snapshots:
       get-intrinsic: 1.2.4
 
   es-errors@1.3.0: {}
+
+  es-module-lexer@1.5.4: {}
 
   esbuild@0.21.5:
     optionalDependencies:
@@ -4066,6 +4101,13 @@ snapshots:
 
   vary@1.1.2: {}
 
+  vite-plugin-lazy-import@1.0.7:
+    dependencies:
+      '@rollup/pluginutils': 5.1.3(rollup@4.24.3)
+      es-module-lexer: 1.5.4
+      rollup: 4.24.3
+      xe-utils: 3.5.32
+
   vite-plugin-mock-dev-server@1.8.0(esbuild@0.21.5)(rollup@4.24.3)(vite@5.4.10(@types/node@22.8.5)(sass@1.80.5)):
     dependencies:
       '@pengzhanbo/utils': 1.1.2
@@ -4161,6 +4203,16 @@ snapshots:
     optionalDependencies:
       typescript: 5.6.3
 
+  vxe-table-plugin-element@4.0.3(vxe-table@4.6.25(vue@3.5.12(typescript@5.6.3))):
+    dependencies:
+      vxe-table: 4.6.25(vue@3.5.12(typescript@5.6.3))
+
+  vxe-table@4.6.25(vue@3.5.12(typescript@5.6.3)):
+    dependencies:
+      dom-zindex: 1.0.6
+      vue: 3.5.12(typescript@5.6.3)
+      xe-utils: 3.5.32
+
   w3c-keyname@2.2.8: {}
 
   webpack-virtual-modules@0.6.2: {}
@@ -4176,6 +4228,8 @@ snapshots:
   wrappy@1.0.2: {}
 
   ws@8.18.0: {}
+
+  xe-utils@3.5.32: {}
 
   xlsx-js-style@1.2.0:
     dependencies:

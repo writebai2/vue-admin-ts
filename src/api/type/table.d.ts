@@ -6,5 +6,10 @@ export interface tableHeader {
 
 export interface tableDataResult {
   header: tableHeader[]
-  data: {}[]
+  data: []
+}
+
+export interface vxeTableDataResult {
+  columns: []
+  data: []
 }

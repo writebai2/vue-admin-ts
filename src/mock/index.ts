@@ -139,12 +139,12 @@ const tableHeader = [
 const vxeTableData = [
   {
     columns: [
-      { field: "id", title: "" },
-      { field: "date", title: "" },
-      { field: "sales", title: "" },
-      { field: "const", title: "" },
-      { field: "profit", title: "" },
-      { field: "price", title: "" },
+      { field: "id", title: "id" },
+      { field: "date", title: "data" },
+      { field: "sales", title: "sales" },
+      { field: "const", title: "const" },
+      { field: "profit", title: "profit" },
+      { field: "price", title: "price" },
     ],
     "data|1000": [
       {

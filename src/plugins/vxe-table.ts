@@ -21,8 +21,8 @@ VXETable.setConfig({
     showHeaderOverflow: "tooltip",
     autoResize: true,
     // stripe: false,
-    border: "inner",
-    // round: false,
+    border: "full",
+    round: false,
     emptyText: "暂无数据",
     rowConfig: {
       isHover: true,
@@ -33,8 +33,8 @@ VXETable.setConfig({
     columnConfig: {
       resizable: false,
     },
-    align: "center",
-    headerAlign: "center",
+    align: "left",
+    headerAlign: "left",
   },
   pager: {
     // size: "medium",

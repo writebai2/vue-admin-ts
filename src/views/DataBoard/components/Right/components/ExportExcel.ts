@@ -1,16 +1,21 @@
 import XLSXS from "xlsx-js-style"
-import { tableHeader } from "@/api/type/table"
+
+export interface Header {
+  field: string
+  title: string
+  width?: number
+}
 
 export const aoaToSheetXlsx = (
-  header: tableHeader[],
+  header: Header[],
   data: any[],
   bookName: string
 ) => {
   const tableHeader = header.map((item) => {
-    return item.label ? item.label : item.prop
+    return item.title ? item.title : item.field
   })
   const fields = header.map((item) => {
-    return item.prop
+    return item.field
   })
 
   const tableData = data.map((item) => {

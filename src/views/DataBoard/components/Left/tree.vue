@@ -11,20 +11,21 @@
           class="my-tree"
           node-key="id"
           :data="data"
-          :props="defaultProps"
+          :props="treeProps"
           :expand-on-click-node="false"
           default-expand-all
           highlight-current
-          :filter-node-method="filterData" />
+          :filter-node-method="filterData"
+          @current-change="handleClick" />
       </el-scrollbar>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted } from "vue"
+import { ref, watch, nextTick, onMounted, inject } from "vue"
 import { getTableTree } from "@/api/mock/index"
-import { useUserStore } from "@/store/modules/user"
+import { useUserStore } from "@/store/index"
 import { ElTree } from "element-plus"
 
 interface Tree {
@@ -34,12 +35,22 @@ interface Tree {
 const useStore = useUserStore()
 const treeRef = ref<InstanceType<typeof ElTree>>()
 const data = ref([])
-const active: any = ref("active")
+const active: any = inject("active")
 const input = ref("")
 
-const defaultProps = {
+const treeProps = {
   children: "children",
   label: "label",
+  disabled: "disabled",
+}
+
+// 设置父节点不可选中
+const disableTree = (data: Tree) => {
+  return data.map((item: any) => ({
+    ...item,
+    disabled: item.children?.length > 0 ? true : false,
+    children: item.children ? disableTree(item.children) : undefined,
+  }))
 }
 
 // 数据异步加载
@@ -47,8 +58,9 @@ const getTreeData = () => {
   const params = useStore.token
   if (params) {
     getTableTree(params).then((res) => {
-      data.value = res.data
+      data.value = disableTree(res.data)
       active.value = res.data[0]
+
       nextTick(() => {
         treeRef.value && treeRef.value.setCurrentKey(active.value.id)
       })
@@ -60,6 +72,13 @@ const getTreeData = () => {
 const filterData = (value: string, data: Tree) => {
   if (!value) return true
   return data.label.includes(value)
+}
+
+// 选择节点
+const handleClick = (data: Tree) => {
+  const disabled = data.disabled
+  if (disabled) return
+  active.value = data
 }
 
 watch(

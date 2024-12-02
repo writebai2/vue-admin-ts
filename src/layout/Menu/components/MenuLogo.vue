@@ -8,7 +8,7 @@
 <script setup lang="ts">
 import { basic } from "@/config/settings"
 import { useRouter } from "vue-router"
-import { useSettingStore } from "@/store/modules/settings"
+import { useSettingStore } from "@/store/index"
 import { storeToRefs } from "pinia"
 
 const settings = useSettingStore()

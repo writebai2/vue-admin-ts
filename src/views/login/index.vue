@@ -60,7 +60,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from "vue"
-import { useUserStore } from "@/store/modules/user"
+import { useUserStore } from "@/store/index"
 import { type FormInstance, type FormRules } from "element-plus"
 import { useRouter, useRoute } from "vue-router"
 

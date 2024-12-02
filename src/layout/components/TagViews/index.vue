@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTagsViewStore } from "@/store/modules/tagsView"
+import { useTagsViewStore } from "@/store/index"
 import { useRoute } from "vue-router"
 import { watch } from "vue"
 import { storeToRefs } from "pinia"

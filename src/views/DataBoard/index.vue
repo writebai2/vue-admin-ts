@@ -11,8 +11,12 @@
 </template>
 
 <script setup lang="ts">
+import { provide, ref } from "vue"
 import Category from "./components/Left/tree.vue"
 import TableData from "./components/Right/index.vue"
+
+let active: any = ref({})
+provide("active", active)
 </script>
 
 <style scoped lang="scss">

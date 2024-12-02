@@ -106,6 +106,36 @@ const treeTable = [
   },
 ]
 
+// 单个节点明细
+const treeSelectData = [
+  {
+    text_id: 1,
+    engine: "vipon_db",
+    sqlText: `
+SELECT
+	email,
+	user_id,
+	join_date,
+	source,
+	plan_interval,
+	plan_amount / 100,
+	plan_kind,
+	case 
+when source =1 then next_period_date
+when source =2 then FROM_UNIXTIME(plan_expiry) 
+end as expiry_date
+FROM
+	tbl_user 
+WHERE
+	stripe_id LIKE 'cus_%' 
+	AND stripe_sub LIKE 'sub_%'
+	AND plan_kind = 1
+	AND promotion_limit>0
+	and join_date>'2024-04-30'
+    `,
+  },
+]
+
 const tableData = {
   // {
   //   id: 11,
@@ -139,7 +169,7 @@ const tableHeader = [
 const vxeTableData = [
   {
     columns: [
-      { field: "id", title: "id" },
+      // { field: "id", title: "id" },
       { field: "date", title: "data" },
       { field: "sales", title: "sales" },
       { field: "const", title: "const" },
@@ -148,7 +178,7 @@ const vxeTableData = [
     ],
     "data|1000": [
       {
-        "id|+1": 1,
+        // "id|+1": 1,
         date: '@date("yyyy-MM-dd")',
         sales: "@float(10, 100, 2, 2)",
         sale: "@float(10000, 1000000, 2, 2)",
@@ -159,34 +189,24 @@ const vxeTableData = [
     ],
   },
 ]
-
-const engines = ["vipon_db", "vipon_log", "erp", "大表库"]
-
-const listDetails = {
-  engine: "vipon_db",
-  sqlText: `
-SELECT
-	email,
-	user_id,
-	join_date,
-	source,
-	plan_interval,
-	plan_amount / 100,
-	plan_kind,
-	case 
-when source =1 then next_period_date
-when source =2 then FROM_UNIXTIME(plan_expiry) 
-end as expiry_date
-FROM
-	tbl_user 
-WHERE
-	stripe_id LIKE 'cus_%' 
-	AND stripe_sub LIKE 'sub_%'
-	AND plan_kind = 1
-	AND promotion_limit>0
-	and join_date>'2024-04-30'
-  `,
-}
+const engines = [
+  {
+    value: "vipon_db",
+    label: "vipon_db",
+  },
+  {
+    value: "vipon_log",
+    label: "vipon_log",
+  },
+  {
+    value: "erp",
+    label: "erp",
+  },
+  {
+    value: "大表库",
+    label: "大表库",
+  },
+]
 
 export default [
   /***
@@ -303,6 +323,28 @@ export default [
         code: 200,
         message: "获取成功",
         data: vxeTableData,
+      }
+    },
+  },
+  /***
+   * @引擎列表
+   */
+  {
+    url: "/api/table/engines",
+    method: "POST",
+    response: ({ body }: any) => {
+      const token = body["token"]
+
+      const userInfo = userinfo.find((item) => item.token === token)
+      //没有返回失败的信息
+      if (!userInfo) {
+        return { code: 201, data: { message: "token错误" } }
+      }
+
+      return {
+        code: 200,
+        message: "获取成功",
+        data: engines,
       }
     },
   },

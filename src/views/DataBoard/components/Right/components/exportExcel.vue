@@ -1,6 +1,10 @@
 <template>
   <div class="layout-container-form-handle">
-    <el-input size="small" v-model="fileName" placeholder="请输入导出文件名" />
+    <el-input
+      size="small"
+      v-model="updateFileName"
+      placeholder="请输入导出文件名"
+      @change="handleFileName" />
 
     <el-button
       size="small"
@@ -20,9 +24,14 @@
     </el-button>
 
     <!-- 数据引擎 -->
-    <el-select size="small" v-model="value" filterable placeholder="数据引擎">
+    <el-select
+      size="small"
+      v-model="selectValue"
+      filterable
+      placeholder="数据引擎"
+      @change="handleEvent">
       <el-option
-        v-for="item in options"
+        v-for="item in engines"
         :key="item.value"
         :label="item.label"
         :value="item.value" />
@@ -37,9 +46,8 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, unref } from "vue"
+import { reactive, ref, toRef, unref } from "vue"
 import { aoaToSheetXlsx } from "./ExportExcel"
-import { tableHeader } from "@/api/type/table"
 import { dayjs } from "element-plus"
 import Layer from "../role/layer.vue"
 import { LayerInterface } from "@/components/layer/type"
@@ -52,10 +60,34 @@ const props = defineProps({
     default: [],
   },
   header: {
-    type: Array<tableHeader>,
+    type: Array<any>,
     default: [],
   },
+  engines: {
+    type: Array<any>,
+    default: [],
+  },
+  engine: {
+    type: String,
+    default: "",
+  },
+  fileName: {
+    type: String,
+    default: "",
+  },
 })
+
+const selectValue = toRef(props, "engine")
+const emit = defineEmits(["handleSelect", "handleFileName"])
+const handleEvent = (val: any) => {
+  emit("handleSelect", val)
+}
+
+// 默认导出文件名
+const updateFileName = ref(props.fileName)
+const handleFileName = (val: any) => {
+  emit("handleFileName", val)
+}
 
 const layer: LayerInterface = reactive({
   show: false,
@@ -63,7 +95,6 @@ const layer: LayerInterface = reactive({
   showButton: true,
 })
 
-const fileName = ref("")
 const runStatus = ref(false)
 
 const runStart = () => {
@@ -78,29 +109,17 @@ const addRole = () => {
   layer.show = true
 }
 
-const value = ref("")
-const options = [
-  {
-    value: "mysql",
-    label: "mysql",
-  },
-  {
-    value: "vipon_log",
-    label: "vipon_log",
-  },
-]
-
 // 导出 Excel 表格
 const handleExportExcel = () => {
   try {
-    if (!unref(fileName).trim()) {
+    if (!unref(updateFileName).trim()) {
       const newFileName =
         "new_excel_" + dayjs().locale("zh-cn").format("YYYY-MM-DD")
 
       aoaToSheetXlsx(props.header, props.data, `${newFileName}.xlsx`)
       return
     }
-    aoaToSheetXlsx(props.header, props.data, `${unref(fileName)}.xlsx`)
+    aoaToSheetXlsx(props.header, props.data, `${unref(updateFileName)}.xlsx`)
   } catch (error) {
     ElMessage.error({
       message: "文件导出异常",

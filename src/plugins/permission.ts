@@ -4,7 +4,7 @@
 import NProgress from "@/utils/nprogress"
 import { basic } from "@/config/settings"
 import router from "@/router"
-import { useUserStoreHook } from "@/store/modules/user"
+import { useUserStoreHook } from "@/store/index"
 import { GETTOKEN, REMOVETOKEN } from "@/utils/local"
 
 export function setupPermission() {

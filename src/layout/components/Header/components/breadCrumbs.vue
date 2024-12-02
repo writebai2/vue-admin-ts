@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { defaultSettings } from "@/config/settings"
-import { useSettingStore } from "@/store/modules/settings"
+import { useSettingStore } from "@/store/index"
 import { useRoute, useRouter, type RouteLocationMatched } from "vue-router"
 import { computed } from "vue"
 import { constRouter } from "@/router/route"

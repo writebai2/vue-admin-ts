@@ -44,8 +44,7 @@ import MenuLogo from "./Menu/components/MenuLogo.vue"
 import MenuItem from "./Menu/components/MenuItem.vue"
 import TagViews from "./components/TagViews/index.vue"
 import Header from "./components/Header/index.vue"
-import { useUserStore } from "@/store/modules/user"
-import { useSettingStore } from "@/store/modules/settings"
+import { useUserStore, useSettingStore } from "@/store/index"
 import { storeToRefs } from "pinia"
 
 const userStore = useUserStore()

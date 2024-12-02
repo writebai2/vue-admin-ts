@@ -1,28 +1,58 @@
 <template>
-  <vxe-grid class="vxe-table" v-bind="tableData" height="auto"></vxe-grid>
+  <vxe-grid
+    class="vxe-table"
+    v-bind="tableOptions"
+    height="auto"
+    :loading="loading"
+    ref="gridRef" />
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue"
-import { getVxeTableData } from "@/api/mock/index"
-import { useUserStore } from "@/store/modules/user"
-import type { VxeGridInstance } from "vxe-table"
+import { onActivated, onMounted, ref, watch } from "vue"
+import type { VxeGridInstance, VxeGridProps } from "vxe-table"
+import { PropType, defineEmits } from "vue"
 
-const tableData = ref(null)
-const useSotre = useUserStore()
+const props = defineProps({
+  tableOptions: {
+    type: Object as PropType<VxeGridProps>,
+    default: () => {},
+  },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
+  showIndex: {
+    type: Boolean,
+    default: false,
+  },
+  showSelection: {
+    type: Boolean,
+    default: false,
+  },
+})
+
 const gridRef = ref<VxeGridInstance>()
-const loading = ref(false)
 
-getVxeTableData(useSotre.token).then(({ data }: any) => {
-  tableData.value = data[0]
-  tableData.value["loading"] = loading.value
-  // tableData.value["height"] = 300
-  console.log(tableData.value)
+watch(
+  () => props.tableOptions,
+  () => {
+    if (props.showIndex) {
+      props.tableOptions.columns?.unshift({ type: "seq", width: 70 })
+    }
+    if (props.showSelection) {
+      props.tableOptions.columns?.unshift({ type: "checkbox", width: 60 })
+    }
+  },
+  { immediate: true }
+)
+
+onActivated(() => {
+  gridRef.value?.reloadData
 })
 </script>
 
 <style scoped lang="scss">
-// 滚动条样式
+// 修改滚动条样式
 .vxe-table {
   ::-webkit-scrollbar {
     width: 8px;

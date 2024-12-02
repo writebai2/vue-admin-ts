@@ -32,6 +32,7 @@ VXETable.setConfig({
     },
     columnConfig: {
       resizable: false,
+      isCurrent: false,
     },
     align: "left",
     headerAlign: "left",

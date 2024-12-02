@@ -34,10 +34,9 @@
 <script setup lang="ts">
 import { defaultSettings } from "@/config/settings"
 import { useFullscreen } from "@vueuse/core"
-import { useUserStore } from "@/store/modules/user"
+import { useUserStore, useTagsViewStore } from "@/store/index"
 import { messageBox } from "@/Hooks/Element-plus"
 import { useRouter, useRoute } from "vue-router"
-import { useTagsViewStore } from "@/store/modules/tagsView"
 
 const { isFullscreen, toggle } = useFullscreen()
 const userStore = useUserStore()

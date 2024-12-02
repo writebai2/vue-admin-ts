@@ -1,13 +1,20 @@
 <template>
   <div class="layout-container">
     <div class="layout-container-form">
-      <ExportExcel :data="tableData" :header="dataHeader" />
+      <ExportExcel
+        :data="tableOptions.data"
+        :header="tableOptions.columns"
+        :engines="engines"
+        :engine="engine"
+        :fileName="fileName"
+        @handleSelect="handleClick"
+        @handleFileName="ChangeFileName" />
     </div>
     <div class="layout-container-sql">
       <InputSql />
     </div>
     <div class="layout-container-table">
-      <Table
+      <!-- <Table
         v-loading="loading"
         :showIndex="false"
         :showSelection="false"
@@ -18,44 +25,89 @@
           :prop="item.prop"
           :width="item.width"
           :label="item.label ? item.label : item.prop" />
-      </Table>
+      </Table> -->
+      <Table :tableOptions="tableOptions" :loading="loading" />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import ExportExcel from "./Header/exportExcel.vue"
-import InputSql from "./Header/inputSql.vue"
-import Table from "@/components/table/index.vue"
-import { getTableData } from "@/api/mock/index"
-import { useUserStore } from "@/store/modules/user"
-import { onMounted, ref } from "vue"
-import { tableHeader } from "@/api/type/table"
+import ExportExcel from "./components/exportExcel.vue"
+import InputSql from "./components/inputSql.vue"
+import Table from "@/components/vxeTable/index.vue"
+import { getVxeTableData } from "@/api/mock/index"
+import { inject, onMounted, ref, watch } from "vue"
+import type { VxeGridProps } from "vxe-table"
+import { useSettingStore, useUserStore } from "@/store/index"
+import { storeToRefs } from "pinia"
 
 const useStore = useUserStore()
-const dataHeader = ref<tableHeader[]>([])
-const tableData = ref<any[]>([])
+const tableOptions = ref<VxeGridProps>({})
 // 是否显示加载中
 const loading = ref(true)
+const settingStore = useSettingStore()
 
-const initTableData = () => {
+const { engines } = storeToRefs(settingStore)
+const engine = ref("")
+
+// 导出文件名
+const fileName = ref()
+const ChangeFileName = (val: any) => {
+  fileName.value = val
+  console.log(fileName.value)
+}
+
+const active: any = inject("active")
+
+const handleClick = (val: any) => {
+  engine.value = val
+}
+
+// const initTableData = () => {
+//   loading.value = true
+//   const token = useStore.token
+//   if (token) {
+//     getTableData(token)
+//       .then(({ data }: any) => {
+//         dataHeader.value = data.header
+//         tableData.value = data.data.data
+//       })
+//       .catch(() => {
+//         dataHeader.value = []
+//         tableData.value = []
+//       })
+//       .finally(() => {
+//         loading.value = false
+//       })
+//   }
+// }
+
+const initTableData = async () => {
   loading.value = true
   const token = useStore.token
   if (token) {
-    getTableData(token)
+    if (engines.value.length === 0) {
+      settingStore.setEngines(token)
+    }
+    await getVxeTableData(token)
       .then(({ data }: any) => {
-        dataHeader.value = data.header
-        tableData.value = data.data.data
+        tableOptions.value = data[0]
       })
-      .catch((error) => {
-        dataHeader.value = []
-        tableData.value = []
+      .catch(() => {
+        tableOptions.value = {}
       })
       .finally(() => {
         loading.value = false
       })
   }
 }
+
+watch(
+  () => active.value,
+  () => {
+    fileName.value = active.value.label
+  }
+)
 
 onMounted(() => {
   initTableData()

@@ -13,12 +13,31 @@
 <script setup lang="ts">
 import { Codemirror } from "vue-codemirror"
 import { sql } from "@codemirror/lang-sql"
-import { ref } from "vue"
+import { ref, toRef, watch } from "vue"
 import { oneDark } from "@codemirror/theme-one-dark"
 
-const sqlCode = ref()
+const props = defineProps({
+  sqlText: {
+    type: String,
+    default: "",
+  },
+})
+
+// 双向绑定
+const sqlText = toRef(props, "sqlText")
+const sqlCode = ref(sqlText.value)
+
+const emit = defineEmits(["update:sqlText"])
 // @ts-ignore
 const extensions = ref([sql(), oneDark])
+
+watch(sqlCode, (newValue) => {
+  emit("update:sqlText", newValue)
+})
+
+watch(sqlText, (newValue) => {
+  sqlCode.value = newValue
+})
 </script>
 
 <style lang="scss" scoped>

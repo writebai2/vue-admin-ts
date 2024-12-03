@@ -1,39 +1,36 @@
 <template>
-  <Table :tableOptions="tableOptions" :loading="loading" />
+  <div>
+    <ExportExcel v-model:title="fileName" v-model:description="description" />
+    <el-button type="primary" @click="updatefileName">fileName</el-button>
+    <el-button type="primary" @click="updatedescription">fileName</el-button>
+    <p>父组件中的 fileName: {{ fileName }}</p>
+    <p>父组件中的 description: {{ description }}</p>
+  </div>
 </template>
 
 <script setup lang="ts">
-import Table from "@/components/vxeTable/index.vue"
-import { useUserStore } from "@/store/index"
-import { ref, onMounted } from "vue"
-import type { VxeGridProps } from "vxe-table"
-import { getVxeTableData } from "@/api/mock/index"
+import { ref } from "vue"
+import ExportExcel from "./test.vue"
 
-const useStore = useUserStore()
-const tableOptions = ref<VxeGridProps>()
-// 是否显示加载中
-const loading = ref(true)
-
-const initTableData = () => {
-  loading.value = true
-  const token = useStore.token
-  if (token) {
-    getVxeTableData(token)
-      .then(({ data }: any) => {
-        tableOptions.value = data[0]
-      })
-      .catch(() => {
-        tableOptions.value = {}
-      })
-      .finally(() => {
-        loading.value = false
-      })
+function generateRandomLetters(length: number): string {
+  const characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+  let result = ""
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length)
+    result += characters[randomIndex]
   }
+  return result
 }
 
-onMounted(() => {
-  initTableData()
-})
-</script>
+// 创建响应式的 fileName
+const fileName = ref("originalFileName.xlsx1")
+const description = ref("This is a file description.1")
 
-<style scoped></style>
+const updatefileName = () => {
+  fileName.value = generateRandomLetters(12)
+}
+
+const updatedescription = () => {
+  description.value = generateRandomLetters(12)
+}
+</script>

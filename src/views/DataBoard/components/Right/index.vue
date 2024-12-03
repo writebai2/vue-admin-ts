@@ -5,13 +5,11 @@
         :data="tableOptions.data"
         :header="tableOptions.columns"
         :engines="engines"
-        :engine="engine"
-        :fileName="fileName"
-        @handleSelect="handleClick"
-        @handleFileName="ChangeFileName" />
+        v-model:engine="engine"
+        v-model:fileName="fileName" />
     </div>
     <div class="layout-container-sql">
-      <InputSql />
+      <InputSql v-model:sqlText="sqlText" />
     </div>
     <div class="layout-container-table">
       <!-- <Table
@@ -48,20 +46,13 @@ const loading = ref(true)
 const settingStore = useSettingStore()
 
 const { engines } = storeToRefs(settingStore)
-const engine = ref("")
+const engine = ref("vipon_db")
+const sqlText = ref("sfsfs")
 
 // 导出文件名
 const fileName = ref()
-const ChangeFileName = (val: any) => {
-  fileName.value = val
-  console.log(fileName.value)
-}
 
 const active: any = inject("active")
-
-const handleClick = (val: any) => {
-  engine.value = val
-}
 
 // const initTableData = () => {
 //   loading.value = true

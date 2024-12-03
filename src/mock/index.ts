@@ -107,7 +107,7 @@ const treeTable = [
 ]
 
 // 单个节点明细
-const treeSelectData = [
+const textboxData = [
   {
     text_id: 1,
     engine: "vipon_db",
@@ -132,6 +132,19 @@ WHERE
 	AND plan_kind = 1
 	AND promotion_limit>0
 	and join_date>'2024-04-30'
+    `,
+  },
+  {
+    text_id: 2,
+    engine: "vipon_log",
+    sqlText: `
+select month(rw.join_date),month(re.emailed_date) as months,rw.reviewer_id,rw.email,count(re.request_id) as deals 
+from tbl_reviewer rw 
+left join tbl_request re  on re.reviewer_id=rw.reviewer_id 
+where (rw.join_date>='2023-05-01 00:00:00' and rw.join_date<'2023-06-01 00:00:00')  and ((re.emailed_date)>='2023-05-01 00:00:00' and (re.emailed_date)<'2023-06-01 00:00:00') 
+ and rw.reviewer_id not in (select reviewer_id from tbl_reviewer_del)
+GROUP BY rw.reviewer_id,months 
+ORDER BY month(rw.join_date) desc 
     `,
   },
 ]
@@ -345,6 +358,38 @@ export default [
         code: 200,
         message: "获取成功",
         data: engines,
+      }
+    },
+  },
+  /***
+   * @详情页接口
+   */
+  {
+    url: "/api/table/textbox",
+    method: "POST",
+    response: ({ body }: any) => {
+      const { token, textbox_id } = body["token"]
+      const userInfo = userinfo.find((item) => item.token === token)
+      //没有返回失败的信息
+      if (!userInfo) {
+        return { code: 201, data: { message: "token错误" } }
+      }
+
+      const textbox = textboxData.find((item) => item.text_id === textbox_id)
+      if (!textbox) {
+        return {
+          code: 404,
+          data: {
+            message: "对应数据列表不存在",
+          },
+        }
+      }
+
+      return {
+        code: 200,
+        data: {
+          message: textbox,
+        },
       }
     },
   },

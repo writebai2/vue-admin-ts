@@ -2,9 +2,8 @@
   <div class="layout-container-form-handle">
     <el-input
       size="small"
-      v-model="updateFileName"
-      placeholder="请输入导出文件名"
-      @change="handleFileName" />
+      v-model="downFileName"
+      placeholder="请输入导出文件名" />
 
     <el-button
       size="small"
@@ -28,8 +27,7 @@
       size="small"
       v-model="selectValue"
       filterable
-      placeholder="数据引擎"
-      @change="handleEvent">
+      placeholder="数据引擎">
       <el-option
         v-for="item in engines"
         :key="item.value"
@@ -46,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRef, unref } from "vue"
+import { reactive, ref, toRef, unref, watch } from "vue"
 import { aoaToSheetXlsx } from "./ExportExcel"
 import { dayjs } from "element-plus"
 import Layer from "../role/layer.vue"
@@ -77,17 +75,26 @@ const props = defineProps({
   },
 })
 
-const selectValue = toRef(props, "engine")
-const emit = defineEmits(["handleSelect", "handleFileName"])
-const handleEvent = (val: any) => {
-  emit("handleSelect", val)
-}
+/***
+ * @双向绑定
+ */
+const fileName = toRef(props, "fileName")
+const engine = toRef(props, "engine")
+const selectValue = ref(engine.value)
+const downFileName = ref(fileName.value)
 
-// 默认导出文件名
-const updateFileName = ref(props.fileName)
-const handleFileName = (val: any) => {
-  emit("handleFileName", val)
-}
+const emit = defineEmits(["update:fileName", "update:engine"])
+
+// 双向更新
+watch([selectValue, downFileName], ([newengine, newfileName]) => {
+  emit("update:engine", newengine)
+  emit("update:fileName", newfileName)
+})
+
+watch([engine, fileName], ([newengine, newfileName]) => {
+  selectValue.value = newengine
+  downFileName.value = newfileName
+})
 
 const layer: LayerInterface = reactive({
   show: false,
@@ -112,14 +119,14 @@ const addRole = () => {
 // 导出 Excel 表格
 const handleExportExcel = () => {
   try {
-    if (!unref(updateFileName).trim()) {
+    if (!unref(downFileName).trim()) {
       const newFileName =
         "new_excel_" + dayjs().locale("zh-cn").format("YYYY-MM-DD")
 
       aoaToSheetXlsx(props.header, props.data, `${newFileName}.xlsx`)
       return
     }
-    aoaToSheetXlsx(props.header, props.data, `${unref(updateFileName)}.xlsx`)
+    aoaToSheetXlsx(props.header, props.data, `${unref(downFileName)}.xlsx`)
   } catch (error) {
     ElMessage.error({
       message: "文件导出异常",

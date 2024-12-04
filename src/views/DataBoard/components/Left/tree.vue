@@ -45,8 +45,8 @@ const treeProps = {
 }
 
 // 设置父节点不可选中
-const disableTree = (data: Tree) => {
-  return data.map((item: any) => ({
+const disableTree = (item: Tree) => {
+  return item.map((item: any) => ({
     ...item,
     disabled: item.children?.length > 0 ? true : false,
     children: item.children ? disableTree(item.children) : undefined,
@@ -60,9 +60,13 @@ const getTreeData = () => {
     getTableTree(params).then((res) => {
       data.value = disableTree(res.data)
       active.value = res.data[0]
+      let selectOption_id = active.value.id
+      if (active.value?.children.length > 0) {
+        selectOption_id = active.value?.children[0].id
+      }
 
       nextTick(() => {
-        treeRef.value && treeRef.value.setCurrentKey(active.value.id)
+        treeRef.value && treeRef.value.setCurrentKey(selectOption_id)
       })
     })
   }

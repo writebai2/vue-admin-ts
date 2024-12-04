@@ -13,3 +13,9 @@ export interface vxeTableDataResult {
   columns: []
   data: []
 }
+
+export interface TableTextBox {
+  textbox_id: number
+  engine: string
+  sqlText: string
+}

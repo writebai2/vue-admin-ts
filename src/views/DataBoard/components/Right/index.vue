@@ -12,18 +12,6 @@
       <InputSql v-model:sqlText="sqlText" />
     </div>
     <div class="layout-container-table">
-      <!-- <Table
-        v-loading="loading"
-        :showIndex="false"
-        :showSelection="false"
-        :data="tableData">
-        <el-table-column
-          v-for="(item, index) in dataHeader"
-          :key="index"
-          :prop="item.prop"
-          :width="item.width"
-          :label="item.label ? item.label : item.prop" />
-      </Table> -->
       <Table :tableOptions="tableOptions" :loading="loading" />
     </div>
   </div>
@@ -33,7 +21,7 @@
 import ExportExcel from "./components/exportExcel.vue"
 import InputSql from "./components/inputSql.vue"
 import Table from "@/components/vxeTable/index.vue"
-import { getVxeTableData } from "@/api/mock/index"
+import { getVxeTableData, getTextbox } from "@/api/mock/index"
 import { inject, onMounted, ref, watch } from "vue"
 import type { VxeGridProps } from "vxe-table"
 import { useSettingStore, useUserStore } from "@/store/index"
@@ -46,8 +34,8 @@ const loading = ref(true)
 const settingStore = useSettingStore()
 
 const { engines } = storeToRefs(settingStore)
-const engine = ref("vipon_db")
-const sqlText = ref("sfsfs")
+const engine = ref<string>("")
+const sqlText = ref<string>("")
 
 // 导出文件名
 const fileName = ref()
@@ -93,11 +81,37 @@ const initTableData = async () => {
   }
 }
 
+const getTextBox = async (id: number, textBoxName: string) => {
+  const token = useStore.token
+  if (token) {
+    await getTextbox(token, id)
+      .then(({ data }) => {
+        engine.value = data.engine
+        sqlText.value = data.sqlText
+        fileName.value = textBoxName
+      })
+      .catch(() => {
+        engine.value = ""
+        sqlText.value = ""
+        fileName.value = ""
+      })
+  }
+}
+
 watch(
   () => active.value,
-  () => {
-    fileName.value = active.value.label
-  }
+  (newActive) => {
+    let runNext = true
+    if (newActive.disabled === undefined) {
+      runNext = true
+    } else {
+      runNext = Object.keys(newActive).length === 0 && !newActive.disabled
+    }
+
+    if (runNext) return
+    getTextBox(newActive.id, newActive.label)
+  },
+  { immediate: true }
 )
 
 onMounted(() => {

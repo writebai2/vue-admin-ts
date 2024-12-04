@@ -1,6 +1,10 @@
 import request from "@/utils/request"
 import type { loginResult, loginParams } from "../type/user"
-import { tableDataResult, vxeTableDataResult } from "../type/table"
+import {
+  tableDataResult,
+  vxeTableDataResult,
+  TableTextBox,
+} from "../type/table"
 
 /***
  * @mockjs模拟数据
@@ -26,4 +30,12 @@ export const getVxeTableData = (token: string) => {
 // 获取查询引擎列表
 export const getEngines = (token: string) => {
   return request<String[]>("/table/engines", "POST", { token: token })
+}
+
+// 获取每个查询的配套信息
+export const getTextbox = (token: string, textbox_id: number) => {
+  return request<TableTextBox>("/table/textbox", "POST", {
+    token: token,
+    textbox_id: textbox_id,
+  })
 }

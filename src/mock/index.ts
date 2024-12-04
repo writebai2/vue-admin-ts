@@ -109,7 +109,7 @@ const treeTable = [
 // 单个节点明细
 const textboxData = [
   {
-    text_id: 1,
+    textbox_id: 9,
     engine: "vipon_db",
     sqlText: `
 SELECT
@@ -135,7 +135,7 @@ WHERE
     `,
   },
   {
-    text_id: 2,
+    textbox_id: 10,
     engine: "vipon_log",
     sqlText: `
 select month(rw.join_date),month(re.emailed_date) as months,rw.reviewer_id,rw.email,count(re.request_id) as deals 
@@ -150,14 +150,6 @@ ORDER BY month(rw.join_date) desc
 ]
 
 const tableData = {
-  // {
-  //   id: 11,
-  //   date: "2018-07-24",
-  //   sales: 23.34,
-  //   sale: 137597.76,
-  //   const: 102203.71,
-  //   profit: 35394.05,
-  // },
   "data|1000": [
     {
       "id|+1": 1,
@@ -368,14 +360,15 @@ export default [
     url: "/api/table/textbox",
     method: "POST",
     response: ({ body }: any) => {
-      const { token, textbox_id } = body["token"]
+      const { token, textbox_id } = body
+
       const userInfo = userinfo.find((item) => item.token === token)
       //没有返回失败的信息
       if (!userInfo) {
         return { code: 201, data: { message: "token错误" } }
       }
 
-      const textbox = textboxData.find((item) => item.text_id === textbox_id)
+      const textbox = textboxData.find((item) => item.textbox_id === textbox_id)
       if (!textbox) {
         return {
           code: 404,
@@ -387,9 +380,7 @@ export default [
 
       return {
         code: 200,
-        data: {
-          message: textbox,
-        },
+        data: textbox,
       }
     },
   },

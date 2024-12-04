@@ -41,6 +41,7 @@ service.interceptors.response.use(
       return apiData
     // 获取后端 code
     const code = apiData.code
+
     // 如果没有 code，则返回异常
     if (code === undefined) {
       message("error", "非本系统接口")
@@ -54,7 +55,7 @@ service.interceptors.response.use(
       //   return logout()
       default:
         // 不是正确的 code
-        message("error", apiData.message || "Error")
+        message("error", apiData.data.message || "Error")
         return Promise.reject(new Error("Error"))
     }
   },

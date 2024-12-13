@@ -13,7 +13,6 @@
           :data="data"
           :props="treeProps"
           :expand-on-click-node="false"
-          default-expand-all
           highlight-current
           :filter-node-method="filterData"
           @current-change="handleClick" />
@@ -59,6 +58,8 @@ const getTreeData = () => {
   if (params) {
     getTableTree(params).then((res) => {
       data.value = disableTree(res.data)
+      console.log(data.value)
+
       active.value = res.data[0]
       let selectOption_id = active.value.id
       if (active.value?.children.length > 0) {

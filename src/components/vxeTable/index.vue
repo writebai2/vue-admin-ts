@@ -4,13 +4,15 @@
     v-bind="tableOptions"
     height="auto"
     :loading="loading"
-    ref="gridRef" />
+    ref="gridRef"
+    :scroll-y="{ enabled: true, gt: 0, mode: 'wheel' }"
+    :scroll-x="{ enabled: true, gt: 0 }" />
 </template>
 
 <script setup lang="ts">
-import { onActivated, onMounted, ref, watch } from "vue"
+import { onActivated, ref, watch } from "vue"
 import type { VxeGridInstance, VxeGridProps } from "vxe-table"
-import { PropType, defineEmits } from "vue"
+import { PropType } from "vue"
 
 const props = defineProps({
   tableOptions: {

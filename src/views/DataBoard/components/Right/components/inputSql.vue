@@ -7,7 +7,8 @@
     :tab-size="2"
     :style="{ width: '100%', height: '100%' }"
     :extensions="extensions"
-    :scrollbarStyle="null" />
+    :scrollbarStyle="null"
+    @blur="formatSql" />
 </template>
 
 <script setup lang="ts">
@@ -15,6 +16,7 @@ import { Codemirror } from "vue-codemirror"
 import { sql } from "@codemirror/lang-sql"
 import { ref, toRef, watch } from "vue"
 import { oneDark } from "@codemirror/theme-one-dark"
+import { format } from "sql-formatter"
 
 const props = defineProps({
   sqlText: {
@@ -22,6 +24,11 @@ const props = defineProps({
     default: "",
   },
 })
+
+// 格式化sql
+const formatSql = () => {
+  sqlCode.value = format(sqlCode.value)
+}
 
 // 双向绑定
 const sqlText = toRef(props, "sqlText")
@@ -36,7 +43,7 @@ watch(sqlCode, (newValue) => {
 })
 
 watch(sqlText, (newValue) => {
-  sqlCode.value = newValue
+  sqlCode.value = format(newValue)
 })
 </script>
 

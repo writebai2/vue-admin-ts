@@ -21,6 +21,7 @@
     "nprogress": "^0.2.0",
     "pinia": "^2.2.5",
     "pinia-plugin-persistedstate": "^4.1.2",
+    "sql-formatter": "^15.4.6",
     "vite-plugin-mock-dev-server": "^1.8.0",
     "vue": "^3.5.12",
     "vue-codemirror": "^6.1.1",

@@ -6,8 +6,6 @@ import UnoCSS from "unocss/vite"
 import AutoImport from "unplugin-auto-import/vite"
 import Components from "unplugin-vue-components/vite"
 import { ElementPlusResolver } from "unplugin-vue-components/resolvers"
-// Mock
-import { viteMockServe } from "vite-plugin-mock"
 // 别名
 import { resolve } from "path"
 // 导入vux-table
@@ -18,18 +16,13 @@ const pathType = resolve(__dirname, "./types")
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
 
+  console.log(env)
+
   return {
     base: "./",
     plugins: [
       vue(),
       UnoCSS(),
-      // mock
-      // viteMockServe({
-      //   // mock 文件路径
-      //   mockPath: "./src/mock",
-      //   // 只有开发环境才开启mock
-      //   enable: command === "serve",
-      // }),
       // element
       AutoImport({
         resolvers: [ElementPlusResolver()],
@@ -45,9 +38,6 @@ export default defineConfig(({ command, mode }) => {
           VxeResolver({
             libraryName: "vxe-table",
           }),
-          // VxeResolver({
-          //   libraryName: "vxe-pc-ui",
-          // }),
         ],
       }),
     ],
@@ -72,7 +62,8 @@ export default defineConfig(({ command, mode }) => {
     },
     // 配置代理跨域
     server: {
-      port: 3000,
+      port: Number(env.VITE_PORT),
+      host: env.VITE_HOST,
       proxy: {
         [env.VITE_BASE_URL]: {
           target: env.VITE_URL,

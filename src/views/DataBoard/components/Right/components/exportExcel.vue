@@ -119,14 +119,19 @@ const addRole = () => {
 // 导出 Excel 表格
 const handleExportExcel = () => {
   try {
+    const exportHeader = props.header.filter((item) => {
+      return !item.hasOwnProperty("type")
+    })
     if (!unref(downFileName).trim()) {
       const newFileName =
         "new_excel_" + dayjs().locale("zh-cn").format("YYYY-MM-DD")
 
-      aoaToSheetXlsx(props.header, props.data, `${newFileName}.xlsx`)
+      aoaToSheetXlsx(exportHeader, props.data, `${newFileName}.xlsx`)
       return
     }
-    aoaToSheetXlsx(props.header, props.data, `${unref(downFileName)}.xlsx`)
+    console.log(exportHeader)
+
+    aoaToSheetXlsx(exportHeader, props.data, `${unref(downFileName)}.xlsx`)
   } catch (error) {
     ElMessage.error({
       message: "文件导出异常",

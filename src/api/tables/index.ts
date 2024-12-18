@@ -23,7 +23,7 @@ export const getVxeTableData = (card_id: number, statement: string) => {
 }
 // 获取查询引擎列表
 export const getEngines = () => {
-  return request<String[]>("/table/engines", "POST")
+  return request<String[]>("/table/engines", "GET")
 }
 // 获取每个查询的配套信息
 export const getTextbox = (textbox_id: number) => {

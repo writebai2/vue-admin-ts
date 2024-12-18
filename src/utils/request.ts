@@ -21,6 +21,8 @@ service.interceptors.request.use(
     if (GETTOKEN()) {
       config.headers.Authorization = GETTOKEN()
     }
+    console.log(config)
+
     return config
   },
   (error: any) => {

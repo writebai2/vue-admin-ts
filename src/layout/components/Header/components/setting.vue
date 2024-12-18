@@ -19,7 +19,7 @@
             @error="() => true">
             <img src="@/assets/avatar/user.svg" />
           </el-avatar>
-          <div class="nickname">{{ userStore.userinfo.username }}</div>
+          <div class="nickname">{{ userStore.userinfo.name }}</div>
         </div>
         <template #dropdown>
           <el-dropdown-menu>

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 import { ref } from "vue"
-import { getEngines } from "@/api/mock/index"
+import { getEngines } from "@/api/tables/index"
 import { store } from "../index"
 
 export const useSettingStore = defineStore(
@@ -16,8 +16,9 @@ export const useSettingStore = defineStore(
       flag.value = !flag.value
     }
 
-    const setEngines = async (token: string) => {
-      const res = await getEngines(token)
+    const setEngines = async () => {
+      const res = await getEngines()
+
       if (res.code === 200) {
         engines.value = res.data
         return

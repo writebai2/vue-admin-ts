@@ -66,8 +66,8 @@ const props = defineProps({
     default: [],
   },
   engine: {
-    type: String,
-    default: "",
+    type: Number,
+    default: null,
   },
   fileName: {
     type: String,

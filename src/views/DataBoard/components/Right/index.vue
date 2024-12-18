@@ -21,7 +21,7 @@
 import ExportExcel from "./components/exportExcel.vue"
 import InputSql from "./components/inputSql.vue"
 import Table from "@/components/vxeTable/index.vue"
-import { getVxeTableData, getTextbox } from "@/api/mock/index"
+import { getVxeTableData, getTextbox } from "@/api/tables/index"
 import { inject, onMounted, ref, watch } from "vue"
 import type { VxeGridProps } from "vxe-table"
 import { useSettingStore, useUserStore } from "@/store/index"
@@ -34,7 +34,7 @@ const loading = ref(true)
 const settingStore = useSettingStore()
 
 const { engines } = storeToRefs(settingStore)
-const engine = ref<string>("")
+const engine = ref<number>()
 const sqlText = ref<string>("")
 
 // 导出文件名
@@ -62,54 +62,54 @@ const active: any = inject("active")
 // }
 
 const initTableData = async () => {
-  loading.value = true
   const token = useStore.token
   if (token) {
     if (engines.value.length === 0) {
-      settingStore.setEngines(token)
+      settingStore.setEngines()
     }
-    await getVxeTableData(token)
-      .then(({ data }: any) => {
-        tableOptions.value = data[0]
-      })
-      .catch(() => {
-        tableOptions.value = {}
-      })
-      .finally(() => {
-        loading.value = false
-      })
   }
 }
 
-const getTextBox = async (id: number, textBoxName: string) => {
-  const token = useStore.token
-  if (token) {
-    await getTextbox(token, id)
-      .then(({ data }) => {
-        engine.value = data.engine
-        sqlText.value = data.sqlText
-        fileName.value = textBoxName
-      })
-      .catch(() => {
-        engine.value = ""
-        sqlText.value = ""
-        fileName.value = ""
-      })
-  }
+const watchTextBox = async (id: number, textBoxName: string) => {
+  await getTextbox(id)
+    .then(({ data }) => {
+      engine.value = data.engine_id
+      sqlText.value = data.query_statement
+      fileName.value = textBoxName
+      loading.value = true
+      // 出事加载数据
+      getVxeTableData(active.value.id, sqlText.value)
+        .then(({ data }: any) => {
+          tableOptions.value = data
+        })
+        .catch((error) => {
+          console.log(error)
+
+          tableOptions.value = {}
+        })
+        .finally(() => {
+          loading.value = false
+        })
+    })
+    .catch(() => {
+      engine.value = 0
+      sqlText.value = ""
+      fileName.value = ""
+    })
 }
 
 watch(
   () => active.value,
   (newActive) => {
     let runNext = true
-    if (newActive.disabled === undefined) {
+    if (newActive.is_parent === undefined) {
       runNext = true
     } else {
-      runNext = Object.keys(newActive).length === 0 && !newActive.disabled
+      runNext = Object.keys(newActive).length === 0 && !newActive.is_parent
     }
 
     if (runNext) return
-    getTextBox(newActive.id, newActive.label)
+    watchTextBox(newActive.id, newActive.label)
   },
   { immediate: true }
 )

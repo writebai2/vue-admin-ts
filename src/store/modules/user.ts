@@ -1,4 +1,4 @@
-import { getUserInfoApi, loginApi } from "@/api/mock"
+import { getUserInfoApi, loginApi } from "@/api/users"
 import router from "@/router"
 import { GETTOKEN, REMOVETOKEN, SETTOKEN } from "@/utils/local"
 import { defineStore } from "pinia"
@@ -22,9 +22,9 @@ export const useUserStore = defineStore(
     const loginUp = async (loginParams: loginParams) => {
       const res = await loginApi(loginParams)
       if (res.code === 200) {
-        token.value = res.data.token
+        token.value = `${res.data.token_type} ${res.data.access_token}`
         SETTOKEN(token.value)
-        await getUserInfo(token.value)
+        await getUserInfo()
         return "登录成功"
       } else {
         return Promise.reject(new Error(res.message))
@@ -51,12 +51,24 @@ export const useUserStore = defineStore(
     // 加载异步路由
     const loadRoutes = (routes: any) => {
       // 路由权限筛选
-      const lastAsyncRoute = filterRoute(routes, cloneDeep(asyncRouter))
+      // const lastAsyncRoute = filterRoute(routes, cloneDeep(asyncRouter))
+      // console.log(lastAsyncRoute)
+      // console.log(asyncRouter)
+
+      let lastAsyncRoute: any = []
+
+      if (routes.includes("all")) {
+        lastAsyncRoute = cloneDeep(asyncRouter)
+      } else {
+        lastAsyncRoute = filterRoute(routes, cloneDeep(asyncRouter))
+      }
+
       // 常量路由，异步路由，任意路由（路由表、侧边栏）
       routerMenuList.value = [...constRouter, ...lastAsyncRoute, ...anyRouter]
 
       // 异步路由+任意路由
       const asyncRoutes = [...lastAsyncRoute, ...anyRouter]
+
       // 添加路由
       asyncRoutes.forEach((item: any) => {
         router.addRoute(item)
@@ -64,8 +76,8 @@ export const useUserStore = defineStore(
     }
 
     // 获取用户信息
-    const getUserInfo = async (token: string) => {
-      const res = await getUserInfoApi(token)
+    const getUserInfo = async () => {
+      const res = await getUserInfoApi()
 
       if (res.code === 200) {
         userinfo.value = res.data

@@ -1,5 +1,6 @@
 export interface loginResult {
-  token: string
+  access_token: string
+  token_type: string
 }
 
 export interface loginParams {

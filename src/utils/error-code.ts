@@ -17,6 +17,7 @@ export const error_code = (code: string) => {
     "503": "服务器暂时无法使用",
     "504": "服务响应超时",
     "505": "HTTP版本不受支持",
+    ECONNABORTED: "请求超时",
   }
   return errorCode[code]
 }

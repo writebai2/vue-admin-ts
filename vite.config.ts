@@ -17,18 +17,19 @@ const pathType = resolve(__dirname, "./types")
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
+
   return {
     base: "./",
     plugins: [
       vue(),
       UnoCSS(),
       // mock
-      viteMockServe({
-        // mock 文件路径
-        mockPath: "./src/mock",
-        // 只有开发环境才开启mock
-        enable: command === "serve",
-      }),
+      // viteMockServe({
+      //   // mock 文件路径
+      //   mockPath: "./src/mock",
+      //   // 只有开发环境才开启mock
+      //   enable: command === "serve",
+      // }),
       // element
       AutoImport({
         resolvers: [ElementPlusResolver()],

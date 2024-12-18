@@ -13,14 +13,13 @@ import { GETTOKEN } from "./local"
 
 const service = axios.create({
   baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: 5000,
+  timeout: 6000000,
 })
 // 请求拦截器
 service.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
-    //   const userStore = useUserStore()
     if (GETTOKEN()) {
-      config.headers.Token = GETTOKEN()
+      config.headers.Authorization = GETTOKEN()
     }
     return config
   },
@@ -55,12 +54,17 @@ service.interceptors.response.use(
       //   return logout()
       default:
         // 不是正确的 code
-        message("error", apiData.data.message || "Error")
+        message("error", apiData.message || "Error")
         return Promise.reject(new Error("Error"))
     }
   },
   (error) => {
-    message("error", error_code(error.response.status) || "网络问题")
+    let error_text = ""
+    if (error.response) {
+      error_text = error_code(error.response.code) || "网络问题"
+    }
+    error_text = error_code(error.code) || "网络问题"
+    message("error", error_text)
     return Promise.reject(new Error(error))
   }
 )

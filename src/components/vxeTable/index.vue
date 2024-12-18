@@ -25,7 +25,7 @@ const props = defineProps({
   },
   showIndex: {
     type: Boolean,
-    default: false,
+    default: true,
   },
   showSelection: {
     type: Boolean,
@@ -39,7 +39,11 @@ watch(
   () => props.tableOptions,
   () => {
     if (props.showIndex) {
-      props.tableOptions.columns?.unshift({ type: "seq", width: 70 })
+      props.tableOptions.columns?.unshift({
+        type: "seq",
+        width: 70,
+        fixed: "left",
+      })
     }
     if (props.showSelection) {
       props.tableOptions.columns?.unshift({ type: "checkbox", width: 60 })

@@ -23,54 +23,47 @@
 
 <script setup lang="ts">
 import { ref, watch, nextTick, onMounted, inject } from "vue"
-import { getTableTree } from "@/api/mock/index"
-import { useUserStore } from "@/store/index"
+import { getTableTree } from "@/api/tables/index"
 import { ElTree } from "element-plus"
+import { isNull } from "lodash"
 
 interface Tree {
   [key: string]: any
 }
 
-const useStore = useUserStore()
 const treeRef = ref<InstanceType<typeof ElTree>>()
-const data = ref([])
+const data: any = ref([])
 const active: any = inject("active")
 const input = ref("")
 
 const treeProps = {
-  children: "children",
   label: "label",
-  disabled: "disabled",
+  children: "children",
+  disabled: "is_parent",
 }
 
-// 设置父节点不可选中
-const disableTree = (item: Tree) => {
-  return item.map((item: any) => ({
-    ...item,
-    disabled: item.children?.length > 0 ? true : false,
-    children: item.children ? disableTree(item.children) : undefined,
-  }))
+const filterTree = (treeData: any) => {
+  for (const item of treeData) {
+    if (item.is_parent && !isNull(item.children) && item.children.length > 0) {
+      return filterTree(item.children)
+    } else if (!item.is_parent) {
+      return item
+    }
+  }
 }
 
 // 数据异步加载
 const getTreeData = () => {
-  const params = useStore.token
-  if (params) {
-    getTableTree(params).then((res) => {
-      data.value = disableTree(res.data)
-      console.log(data.value)
+  getTableTree().then((res) => {
+    data.value = res.data.data
+    active.value = filterTree(res.data.data)
 
-      active.value = res.data[0]
-      let selectOption_id = active.value.id
-      if (active.value?.children.length > 0) {
-        selectOption_id = active.value?.children[0].id
-      }
+    let selectOption_id = active.value.id
 
-      nextTick(() => {
-        treeRef.value && treeRef.value.setCurrentKey(selectOption_id)
-      })
+    nextTick(() => {
+      treeRef.value && treeRef.value.setCurrentKey(selectOption_id)
     })
-  }
+  })
 }
 
 // 筛选数据
@@ -81,8 +74,8 @@ const filterData = (value: string, data: Tree) => {
 
 // 选择节点
 const handleClick = (data: Tree) => {
-  const disabled = data.disabled
-  if (disabled) return
+  const is_parent = data.is_parent
+  if (is_parent) return
   active.value = data
 }
 

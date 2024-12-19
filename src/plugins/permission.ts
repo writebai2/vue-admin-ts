@@ -42,7 +42,7 @@ export function setupPermission() {
           }
         } else {
           try {
-            await userStore.getUserInfo(hasToken)
+            await userStore.getUserInfo()
             next({ ...to, replace: true })
           } catch (error: any) {
             REMOVETOKEN()

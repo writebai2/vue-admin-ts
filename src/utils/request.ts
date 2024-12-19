@@ -1,5 +1,5 @@
 import { message } from "@/Hooks/Element-plus"
-import { useUserStore } from "@/store/modules/user"
+import { useUserStore, useBoardStore } from "@/store/index"
 
 import axios, {
   type Method,
@@ -44,6 +44,7 @@ service.interceptors.response.use(
     // 获取后端 code
     const code = apiData.code
     const user = useUserStore()
+    const boardStore = useBoardStore()
 
     // 如果没有 code，则返回异常
     if (code === undefined) {
@@ -55,7 +56,9 @@ service.interceptors.response.use(
         return apiData
       case 401:
         // Token 过期时
-        return user.loginOut()
+        boardStore.logout()
+        user.loginOut()
+        return
       default:
         // 不是正确的 code
         message("error", apiData.message || "Error")

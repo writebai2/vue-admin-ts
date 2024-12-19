@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { defaultSettings } from "@/config/settings"
 import { useFullscreen } from "@vueuse/core"
-import { useUserStore, useTagsViewStore } from "@/store/index"
+import { useUserStore, useTagsViewStore, useBoardStore } from "@/store/index"
 import { messageBox } from "@/Hooks/Element-plus"
 import { useRouter, useRoute } from "vue-router"
 
@@ -43,10 +43,12 @@ const userStore = useUserStore()
 const router = useRouter()
 const route = useRoute()
 const tagViewStore = useTagsViewStore()
+const boardStore = useBoardStore()
 
 // 退出登录
 const loginOut = async () => {
   await messageBox("提示", "您确定要退出登录吗？")
+  boardStore.logout()
   userStore.loginOut()
   tagViewStore.delOtherTag(route.path)
   router.push({

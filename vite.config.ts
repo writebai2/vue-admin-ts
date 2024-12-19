@@ -17,6 +17,7 @@ export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
 
   console.log(env)
+  console.log(process.env.NODE_ENV)
 
   return {
     base: "./",
@@ -68,7 +69,7 @@ export default defineConfig(({ command, mode }) => {
         [env.VITE_BASE_URL]: {
           target: env.VITE_URL,
           changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, ""),
+          // rewrite: (path) => path.replace(/^\/api/, ""),
         },
       },
     },

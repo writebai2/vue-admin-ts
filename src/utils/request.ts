@@ -12,8 +12,11 @@ import { error_code } from "./error-code"
 import { GETTOKEN } from "./local"
 
 const service = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-  timeout: 6000000,
+  baseURL:
+    process.env.NODE_ENV === "development"
+      ? import.meta.env.VITE_BASE_URL
+      : `${import.meta.env.VITE_URL}${import.meta.env.VITE_BASE_URL}`,
+  timeout: 5000 * 100,
 })
 // 请求拦截器
 service.interceptors.request.use(
@@ -22,7 +25,6 @@ service.interceptors.request.use(
       config.headers.Authorization = GETTOKEN()
     }
     console.log(config)
-
     return config
   },
   (error: any) => {

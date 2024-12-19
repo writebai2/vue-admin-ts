@@ -73,5 +73,22 @@ export default defineConfig(({ command, mode }) => {
         },
       },
     },
+    build: {
+      // 配置是否输出警告
+      minify: "terser",
+      terserOptions: {
+        compress: {
+          // 关闭vue生产环境中的警告
+          drop_console: true, // 移除 console.log
+          drop_debugger: true, // 移除 debugger
+          warnings: false, // 关闭警告
+        },
+      },
+    },
+    // 控制是否输出 warnings
+    esbuild: {
+      // 关闭 esbuild 警告
+      logLevel: "silent", // 生产环境中不输出警告
+    },
   }
 })

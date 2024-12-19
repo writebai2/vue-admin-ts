@@ -1,5 +1,5 @@
 import { message } from "@/Hooks/Element-plus"
-// import { useUserStore } from "@/stores/modules/user"
+import { useUserStore } from "@/store/modules/user"
 
 import axios, {
   type Method,
@@ -16,7 +16,7 @@ const service = axios.create({
     process.env.NODE_ENV === "development"
       ? import.meta.env.VITE_BASE_URL
       : `${import.meta.env.VITE_URL}${import.meta.env.VITE_BASE_URL}`,
-  timeout: 5000 * 100,
+  timeout: 5000 * 1000,
 })
 // 请求拦截器
 service.interceptors.request.use(
@@ -24,7 +24,6 @@ service.interceptors.request.use(
     if (GETTOKEN()) {
       config.headers.Authorization = GETTOKEN()
     }
-    console.log(config)
     return config
   },
   (error: any) => {
@@ -44,6 +43,7 @@ service.interceptors.response.use(
       return apiData
     // 获取后端 code
     const code = apiData.code
+    const user = useUserStore()
 
     // 如果没有 code，则返回异常
     if (code === undefined) {
@@ -53,9 +53,9 @@ service.interceptors.response.use(
     switch (code) {
       case 200:
         return apiData
-      // case 401:
-      //   // Token 过期时
-      //   return logout()
+      case 401:
+        // Token 过期时
+        return user.loginOut()
       default:
         // 不是正确的 code
         message("error", apiData.message || "Error")

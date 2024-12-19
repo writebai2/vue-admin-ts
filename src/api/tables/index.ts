@@ -29,3 +29,15 @@ export const getEngines = () => {
 export const getTextbox = (textbox_id: number) => {
   return request<TableTextBox>(`/table/textbox/${textbox_id}`, "GET")
 }
+
+// textbox信息更新
+export const updateTextBox = (
+  textbox_id: number,
+  engine_id: number,
+  statement: string
+) => {
+  return request<TableTextBox>(`/table/textbox/${textbox_id}`, "POST", {
+    engine_id: engine_id,
+    statement: statement,
+  })
+}

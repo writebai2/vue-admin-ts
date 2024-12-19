@@ -52,9 +52,6 @@ export const useUserStore = defineStore(
     const loadRoutes = (routes: any) => {
       // 路由权限筛选
       // const lastAsyncRoute = filterRoute(routes, cloneDeep(asyncRouter))
-      // console.log(lastAsyncRoute)
-      // console.log(asyncRouter)
-
       let lastAsyncRoute: any = []
 
       if (routes.includes("all")) {

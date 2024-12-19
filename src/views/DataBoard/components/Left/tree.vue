@@ -22,18 +22,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, nextTick, onMounted, inject } from "vue"
+import { ref, watch, nextTick, onMounted } from "vue"
 import { getTableTree } from "@/api/tables/index"
 import { ElTree } from "element-plus"
 import { isNull } from "lodash"
+import { useBoardStore } from "@/store/index"
 
 interface Tree {
   [key: string]: any
 }
 
+const boardStore = useBoardStore()
+
 const treeRef = ref<InstanceType<typeof ElTree>>()
 const data: any = ref([])
-const active: any = inject("active")
 const input = ref("")
 
 const treeProps = {
@@ -53,17 +55,32 @@ const filterTree = (treeData: any) => {
 }
 
 // 数据异步加载
-const getTreeData = () => {
-  getTableTree().then((res) => {
-    data.value = res.data.data
-    active.value = filterTree(res.data.data)
+const getTreeData = async () => {
+  const res = await getTableTree()
+  if (res.code === 200) {
+    const resData = res.data.data
+    data.value = resData
 
-    let selectOption_id = active.value.id
+    if (boardStore.lastIndex === null) {
+      const tree_tmp = filterTree(resData)
+      console.log(tree_tmp)
+      await boardStore.setCard(tree_tmp)
+      const selectOption_id = tree_tmp.id
 
+      nextTick(() => {
+        if (treeRef.value) {
+          treeRef.value.setCurrentKey(selectOption_id)
+          boardStore.lastIndex = selectOption_id
+        }
+      })
+      return
+    }
     nextTick(() => {
-      treeRef.value && treeRef.value.setCurrentKey(selectOption_id)
+      if (treeRef.value) {
+        treeRef.value.setCurrentKey(boardStore.lastIndex!)
+      }
     })
-  })
+  }
 }
 
 // 筛选数据
@@ -76,7 +93,8 @@ const filterData = (value: string, data: Tree) => {
 const handleClick = (data: Tree) => {
   const is_parent = data.is_parent
   if (is_parent) return
-  active.value = data
+  boardStore.setCard(data)
+  boardStore.lastIndex = data.id
 }
 
 watch(

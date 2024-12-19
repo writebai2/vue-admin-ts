@@ -22,5 +22,3 @@ export const SETCOLOR = (color: string) => {
 export const GETCOLOR = () => {
   return localStorage.getItem("COLOR")
 }
-
-sessionStorage

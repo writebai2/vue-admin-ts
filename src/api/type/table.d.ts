@@ -19,7 +19,7 @@ export interface TableTextBox {
   id: number
   card_id: number
   engine_id: number
-  query_statement: string
+  statement: string
 }
 
 // 定义树形列表

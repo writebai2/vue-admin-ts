@@ -2,7 +2,7 @@
   <div class="layout-container-form-handle">
     <el-input
       size="small"
-      v-model="downFileName"
+      v-model="boardStore.activeCard.label"
       placeholder="请输入导出文件名" />
 
     <el-button
@@ -25,7 +25,7 @@
     <!-- 数据引擎 -->
     <el-select
       size="small"
-      v-model="selectValue"
+      v-model="boardStore.textbox.engine_id"
       filterable
       placeholder="数据引擎">
       <el-option
@@ -44,13 +44,17 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref, toRef, unref, watch } from "vue"
+import { reactive, ref, unref } from "vue"
 import { aoaToSheetXlsx } from "./ExportExcel"
 import { dayjs } from "element-plus"
 import Layer from "../role/layer.vue"
 import { LayerInterface } from "@/components/layer/type"
+import { useBoardStore } from "@/store/modules/board"
+import { updateTextBox } from "@/api/tables/index"
 
 // const startUrl = new URL("@/assets/select/start.svg",import.meta.url).href
+
+const boardStore = useBoardStore()
 
 const props = defineProps({
   data: {
@@ -65,37 +69,11 @@ const props = defineProps({
     type: Array<any>,
     default: [],
   },
-  engine: {
-    type: Number,
-    default: null,
-  },
-  fileName: {
-    type: String,
-    default: "",
-  },
 })
 
 /***
  * @双向绑定
  */
-const fileName = toRef(props, "fileName")
-const engine = toRef(props, "engine")
-const selectValue = ref(engine.value)
-const downFileName = ref(fileName.value)
-
-const emit = defineEmits(["update:fileName", "update:engine"])
-
-// 双向更新
-watch([selectValue, downFileName], ([newengine, newfileName]) => {
-  emit("update:engine", newengine)
-  emit("update:fileName", newfileName)
-})
-
-watch([engine, fileName], ([newengine, newfileName]) => {
-  selectValue.value = newengine
-  downFileName.value = newfileName
-})
-
 const layer: LayerInterface = reactive({
   show: false,
   title: "权限管理",
@@ -104,8 +82,21 @@ const layer: LayerInterface = reactive({
 
 const runStatus = ref(false)
 
-const runStart = () => {
+const runStart = async () => {
   runStatus.value = !runStatus.value
+  const res = await updateTextBox(
+    boardStore.textbox.id,
+    boardStore.textbox.engine_id,
+    boardStore.textbox.statement
+  )
+  if (res.code === 200) {
+    boardStore.textbox = res.data
+    await boardStore.handleSelect(boardStore.textbox.statement)
+    ElMessage.success("查询成功")
+  } else {
+    ElMessage.error(res.message)
+  }
+  runStatus.value = false
 }
 
 const runStop = () => {
@@ -122,16 +113,18 @@ const handleExportExcel = () => {
     const exportHeader = props.header.filter((item) => {
       return !item.hasOwnProperty("type")
     })
-    if (!unref(downFileName).trim()) {
+    if (!unref(boardStore.activeCard.label).trim()) {
       const newFileName =
         "new_excel_" + dayjs().locale("zh-cn").format("YYYY-MM-DD")
 
       aoaToSheetXlsx(exportHeader, props.data, `${newFileName}.xlsx`)
       return
     }
-    console.log(exportHeader)
-
-    aoaToSheetXlsx(exportHeader, props.data, `${unref(downFileName)}.xlsx`)
+    aoaToSheetXlsx(
+      exportHeader,
+      props.data,
+      `${unref(boardStore.activeCard.label)}.xlsx`
+    )
   } catch (error) {
     ElMessage.error({
       message: "文件导出异常",

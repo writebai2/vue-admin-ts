@@ -1,6 +1,6 @@
 <template>
   <codemirror
-    v-model="sqlCode"
+    v-model="boardStore.textbox.statement"
     placeholder="请输入sql语句"
     :autofocus="true"
     :indent-with-tab="true"
@@ -14,37 +14,18 @@
 <script setup lang="ts">
 import { Codemirror } from "vue-codemirror"
 import { sql } from "@codemirror/lang-sql"
-import { ref, toRef, watch } from "vue"
+import { ref } from "vue"
 import { oneDark } from "@codemirror/theme-one-dark"
 import { format } from "sql-formatter"
+import { useBoardStore } from "@/store/modules/board"
 
-const props = defineProps({
-  sqlText: {
-    type: String,
-    default: "",
-  },
-})
-
+const boardStore = useBoardStore()
 // 格式化sql
 const formatSql = () => {
-  sqlCode.value = format(sqlCode.value)
+  boardStore.textbox.statement = format(boardStore.textbox.statement)
 }
-
-// 双向绑定
-const sqlText = toRef(props, "sqlText")
-const sqlCode = ref(sqlText.value)
-
-const emit = defineEmits(["update:sqlText"])
 // @ts-ignore
 const extensions = ref([sql(), oneDark])
-
-watch(sqlCode, (newValue) => {
-  emit("update:sqlText", newValue)
-})
-
-watch(sqlText, (newValue) => {
-  sqlCode.value = format(newValue)
-})
 </script>
 
 <style lang="scss" scoped>

@@ -33,12 +33,24 @@ const props = defineProps({
   },
 })
 
+const addReq = (data: any) => {
+  return data.some((item: any) => {
+    return item.hasOwnProperty("type")
+  })
+}
+
 const gridRef = ref<VxeGridInstance>()
 
 watch(
   () => props.tableOptions,
   () => {
-    if (props.showIndex) {
+    if (
+      Object.keys(props.tableOptions).length <= 0 ||
+      props.tableOptions.data?.length === 0
+    )
+      return
+    const isrun = addReq(props.tableOptions.columns)
+    if (props.showIndex && !isrun) {
       props.tableOptions.columns?.unshift({
         type: "seq",
         width: 70,

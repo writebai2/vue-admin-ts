@@ -15,10 +15,9 @@ const pathType = resolve(__dirname, "./types")
 
 export default defineConfig(({ command, mode }) => {
   const env = loadEnv(mode, process.cwd())
-
-  console.log(env)
-  console.log(process.env.NODE_ENV)
-
+  // 打印环境变量
+  // console.log(env)
+  // console.log(process.env.NODE_ENV)
   return {
     base: "./",
     plugins: [

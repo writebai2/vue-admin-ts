@@ -90,7 +90,15 @@ const runStart = async () => {
     boardStore.textbox.statement
   )
   if (res.code === 200) {
-    boardStore.textbox = res.data
+    // 不能直接等于返回值，否则会导致值变为对象
+    // 这里应使用浅拷贝，而不是直接复制，直接复制会改变对象的引用
+    /***
+     * boardStore.textbox = res.data 会创建一个新的对象引用，
+     * 并将 res.data 赋值给 boardStore.textbox。
+     * 这意味着原来的 boardStore.textbox 对象失去了引用，
+     * 它的属性不会被修改，但是这个对象不再是 boardStore.textbox 的值。
+     */
+    Object.assign(boardStore.textbox, res.data)
     await boardStore.handleSelect(boardStore.textbox.statement)
     ElMessage.success("查询成功")
   } else {

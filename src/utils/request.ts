@@ -12,10 +12,11 @@ import { error_code } from "./error-code"
 import { GETTOKEN } from "./local"
 
 const service = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "development"
-      ? import.meta.env.VITE_BASE_URL
-      : `${import.meta.env.VITE_URL}${import.meta.env.VITE_BASE_URL}`,
+  // baseURL:
+  //   process.env.NODE_ENV === "development"
+  //     ? import.meta.env.VITE_BASE_URL
+  //     : `${import.meta.env.VITE_URL}${import.meta.env.VITE_BASE_URL}`,
+  baseURL: import.meta.env.VITE_BASE_URL,
   timeout: 5000 * 1000,
 })
 // 请求拦截器

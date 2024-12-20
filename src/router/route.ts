@@ -37,60 +37,60 @@ export const constRouter: Array<RouteRecordRaw> = [
  * @异步路由也叫权限路由
  */
 export const asyncRouter: Array<RouteRecordRaw> = [
-  {
-    path: "/moremenu",
-    name: "moremenu",
-    meta: { title: "多级菜单", icon: "Operation", isShow: true },
-    component: Layout,
-    redirect: "/moremenu/menu-one",
-    children: [
-      {
-        path: "/moremenu/menu-one",
-        name: "menu-one",
-        meta: { title: "一级菜单 ", icon: "DArrowRight", isShow: true },
-        component: () => import("@/views/MoreMenu/MenuOne/index.vue"),
-        redirect: "/moremenu/menu-one/menu-two",
-        children: [
-          {
-            path: "/moremenu/menu-one/menu-two",
-            name: "menu-two",
-            redirect: "/moremenu/menu-one/menu-two/menu-three-1",
-            meta: { title: "二级菜单 ", icon: "DArrowRight", isShow: true },
-            component: () =>
-              import("@/views/MoreMenu/MenuOne/MenuTwo/index.vue"),
-            children: [
-              {
-                path: "/moremenu/menu-one/menu-two/menu-three-1",
-                name: "menu-three-1",
-                meta: {
-                  title: "三级菜单-1",
-                  icon: "DArrowRight",
-                  isShow: true,
-                },
-                component: () =>
-                  import(
-                    "@/views/MoreMenu/MenuOne/MenuTwo/MenuThree/index-1.vue"
-                  ),
-              },
-              {
-                path: "/moremenu/menu-one/menu-two/menu-three-2",
-                name: "menu-three-2",
-                meta: {
-                  title: "三级菜单-2",
-                  icon: "DArrowRight",
-                  isShow: true,
-                },
-                component: () =>
-                  import(
-                    "@/views/MoreMenu/MenuOne/MenuTwo/MenuThree/index-2.vue"
-                  ),
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
+  // {
+  //   path: "/moremenu",
+  //   name: "moremenu",
+  //   meta: { title: "多级菜单", icon: "Operation", isShow: true },
+  //   component: Layout,
+  //   redirect: "/moremenu/menu-one",
+  //   children: [
+  //     {
+  //       path: "/moremenu/menu-one",
+  //       name: "menu-one",
+  //       meta: { title: "一级菜单 ", icon: "DArrowRight", isShow: true },
+  //       component: () => import("@/views/MoreMenu/MenuOne/index.vue"),
+  //       redirect: "/moremenu/menu-one/menu-two",
+  //       children: [
+  //         {
+  //           path: "/moremenu/menu-one/menu-two",
+  //           name: "menu-two",
+  //           redirect: "/moremenu/menu-one/menu-two/menu-three-1",
+  //           meta: { title: "二级菜单 ", icon: "DArrowRight", isShow: true },
+  //           component: () =>
+  //             import("@/views/MoreMenu/MenuOne/MenuTwo/index.vue"),
+  //           children: [
+  //             {
+  //               path: "/moremenu/menu-one/menu-two/menu-three-1",
+  //               name: "menu-three-1",
+  //               meta: {
+  //                 title: "三级菜单-1",
+  //                 icon: "DArrowRight",
+  //                 isShow: true,
+  //               },
+  //               component: () =>
+  //                 import(
+  //                   "@/views/MoreMenu/MenuOne/MenuTwo/MenuThree/index-1.vue"
+  //                 ),
+  //             },
+  //             {
+  //               path: "/moremenu/menu-one/menu-two/menu-three-2",
+  //               name: "menu-three-2",
+  //               meta: {
+  //                 title: "三级菜单-2",
+  //                 icon: "DArrowRight",
+  //                 isShow: true,
+  //               },
+  //               component: () =>
+  //                 import(
+  //                   "@/views/MoreMenu/MenuOne/MenuTwo/MenuThree/index-2.vue"
+  //                 ),
+  //             },
+  //           ],
+  //         },
+  //       ],
+  //     },
+  //   ],
+  // },
   {
     path: "/databoard",
     name: "databoard",

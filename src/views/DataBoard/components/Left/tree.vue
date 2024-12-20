@@ -61,23 +61,22 @@ const getTreeData = async () => {
     const resData = res.data.data
     data.value = resData
 
-    if (boardStore.lastIndex === null) {
-      const tree_tmp = filterTree(resData)
-      console.log(tree_tmp)
-      await boardStore.setCard(tree_tmp)
-      const selectOption_id = tree_tmp.id
+    // if (boardStore.lastIndex === null) {
+    //   const tree_tmp = filterTree(resData)
+    //   await boardStore.setCard(tree_tmp)
+    //   // const selectOption_id = tree_tmp.id
 
-      nextTick(() => {
-        if (treeRef.value) {
-          treeRef.value.setCurrentKey(selectOption_id)
-          boardStore.lastIndex = selectOption_id
-        }
-      })
-      return
-    }
+    //   // nextTick(() => {
+    //   //   if (treeRef.value) {
+    //   //     treeRef.value.setCurrentKey(selectOption_id)
+    //   //     boardStore.lastIndex = selectOption_id
+    //   //   }
+    //   // })
+    //   return
+    // }
     nextTick(() => {
-      if (treeRef.value) {
-        treeRef.value.setCurrentKey(boardStore.lastIndex!)
+      if (treeRef.value && boardStore.lastIndex !== null) {
+        treeRef.value.setCurrentKey(boardStore.lastIndex)
       }
     })
   }

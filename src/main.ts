@@ -5,7 +5,7 @@ import router from "./router"
 import "virtual:uno.css"
 import "@/styles/index.scss"
 // 导入mock数据
-import "./mock/index"
+// import "./mock/index"
 // 导入自定义插件
 import setupPlugins from "@/plugins"
 

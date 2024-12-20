@@ -11,3 +11,7 @@ export const loginApi = (loginParams: loginParams) => {
 export const getUserInfoApi = () => {
   return request<any>("/users/me", "GET")
 }
+
+export const getCookie = () => {
+  return request<any>("/query/cookie", "GET")
+}

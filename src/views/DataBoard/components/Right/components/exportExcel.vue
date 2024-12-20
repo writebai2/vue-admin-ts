@@ -50,7 +50,7 @@ import { dayjs } from "element-plus"
 import Layer from "../role/layer.vue"
 import { LayerInterface } from "@/components/layer/type"
 import { useBoardStore } from "@/store/modules/board"
-import { updateTextBox } from "@/api/tables/index"
+import { getCookie, updateTextBox } from "@/api/index"
 
 // const startUrl = new URL("@/assets/select/start.svg",import.meta.url).href
 
@@ -83,6 +83,10 @@ const layer: LayerInterface = reactive({
 const runStatus = ref(false)
 
 const runStart = async () => {
+  getCookie()
+
+  return
+
   runStatus.value = !runStatus.value
   const res = await updateTextBox(
     boardStore.textbox.id,
